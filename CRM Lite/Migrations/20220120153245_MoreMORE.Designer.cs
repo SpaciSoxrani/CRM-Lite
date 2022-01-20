@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CRM_Lite.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220120132317_MoreMORE")]
+    [Migration("20220120153245_MoreMORE")]
     partial class MoreMORE
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,18 +70,11 @@ namespace CRM_Lite.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ChangedByUserId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("ChangedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Comments")
-                        .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<Guid?>("CreatedByUserId")
-                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -90,68 +83,51 @@ namespace CRM_Lite.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ExecutorContact")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("FullName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid?>("GroupId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("IncomingNumber")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsVisible")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("JobTitle")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Organization")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid?>("RegionId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("RequestSent")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid?>("ResponsibleUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ResultComments")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid?>("ResultId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Site")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid?>("StatusId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ChangedByUserId");
-
-                    b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("GroupId");
 
@@ -313,14 +289,6 @@ namespace CRM_Lite.Migrations
 
             modelBuilder.Entity("CRM_Lite.Data.Models.PreSale.PreSale", b =>
                 {
-                    b.HasOne("CRM_Lite.Data.Models.User", "ChangedByUser")
-                        .WithMany()
-                        .HasForeignKey("ChangedByUserId");
-
-                    b.HasOne("CRM_Lite.Data.Models.User", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId");
-
                     b.HasOne("CRM_Lite.Data.Models.PreSale.PreSaleGroup", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId");
@@ -340,10 +308,6 @@ namespace CRM_Lite.Migrations
                     b.HasOne("CRM_Lite.Data.Models.PreSale.PreSaleStatus", "Status")
                         .WithMany("PreSales")
                         .HasForeignKey("StatusId");
-
-                    b.Navigation("ChangedByUser");
-
-                    b.Navigation("CreatedByUser");
 
                     b.Navigation("Group");
 

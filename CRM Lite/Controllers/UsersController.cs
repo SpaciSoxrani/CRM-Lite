@@ -10,6 +10,8 @@ using Vostok.Logging.Abstractions;
 
 namespace CRM_Lite.Controllers
 {
+    [Produces("application/json")]
+    [Route("[controller]")]
     public class UsersController : Controller
     {
         private readonly ApplicationContext _context;

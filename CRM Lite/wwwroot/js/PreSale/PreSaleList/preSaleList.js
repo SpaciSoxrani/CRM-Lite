@@ -13,11 +13,11 @@ $(document).ready(function () {
         },
         "ajax": {
             "type": "GET",
-            "url": `${api}/api/PreSales/ForPreSalesTable/${preSaleGroupId}`,
+            "url": `${location.origin}/PreSales/ForPreSalesTable/${preSaleGroupId}`,
             "dataSrc": function (json) {
                 contactData = json;
 
-                tableEditFields = new DataTableFields(new Map(), getPreSaleDto, contactData, `${api}/api/PreSales/EditPreSale/`);
+                tableEditFields = new DataTableFields(new Map(), getPreSaleDto, contactData, `${location.origin}/PreSales/EditPreSale/`);
                 settingFields();
 
                 window.initializePreSalesFilters(json);
@@ -270,14 +270,14 @@ function settingFields() {
     });
     responsibleUserField.isConfirm = true;
     responsibleUserField.confirmText = "{fieldText} будет отправлено уведомление. Вы уверены?";
-    responsibleUserField.fillFieldUrl = `${api}/api/Users/IdsAndNames/Active`;
+    responsibleUserField.fillFieldUrl = `${location.origin}/Users/GetAllUsers`;
     responsibleUserField.fillFieldName = 'displayName'
     tableEditFields.addField('responsibleUser', responsibleUserField);
 
     var resultField = new SelectField("result");
     resultField.isNullable = true;
     resultField.selectFieldId = 'pre-sale-edit-result';
-    resultField.fillFieldUrl = `${api}/api/PreSales/PreSaleResults`;
+    resultField.fillFieldUrl = `${location.origin}/PreSales/PreSaleResults`;
     tableEditFields.requiredFields.set('result', ['resultComments']);
     resultField.isSorting = true;
     resultField.sortMethod = (value, row) => {
@@ -294,7 +294,7 @@ function settingFields() {
         else
             rowValues.timezone = '';
     });
-    regionField.fillFieldUrl = `${api}/api/PreSales/PreSaleRegions`;
+    regionField.fillFieldUrl = `${location.origin}/PreSales/PreSaleRegions`;
     tableEditFields.addField('region', regionField);
 
     var statusField = new SelectField("status");
@@ -315,7 +315,7 @@ function settingFields() {
                 return '5';
         }
     };
-    statusField.fillFieldUrl = `${api}/api/PreSales/PreSaleStatuses`;
+    statusField.fillFieldUrl = `${location.origin}/PreSales/PreSaleStatuses`;
     tableEditFields.addField('status', statusField);
 
 

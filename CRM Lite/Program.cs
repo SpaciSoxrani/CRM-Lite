@@ -39,7 +39,7 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<ApplicationContext>();
     var logger = services.GetRequiredService<ILogger<DbInitializer>>();
 
-    //await context.Database.MigrateAsync();
+    await context.Database.MigrateAsync();
 
     await DbInitializer.InitializeAsync(context, logger);
 }

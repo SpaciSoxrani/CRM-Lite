@@ -38,7 +38,7 @@ function postPreSale(element, preSaleDto, preSale) {
 
     $.ajax({
         type: 'POST',
-        url: `${api}/api/PreSales/CreatePreSale`,
+        url: `${location.origin}/PreSales/CreatePreSale`,
         data: JSON.stringify(preSaleDto),
         contentType: "application/json",
         success: function (data) {
@@ -78,8 +78,8 @@ function deletePreSale(id) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                type: "PUT",
-                url: `${api}/api/PreSales/DeletePreSale/${id}`,
+                type: "DELETE",
+                url: `${location.origin}/PreSales/DeletePreSale/${id}`,
                 success: function (data) {
                     tableEditFields.tableData = tableEditFields.tableData.filter(preSale => preSale.id != id);
                     window.contactData = tableEditFields.tableData;
@@ -98,7 +98,7 @@ function getPreSaleFields() {
 
     if (preSaleRegion.length > 0) {
         $.ajax({
-            url: `${api}/api/PreSales/PreSaleRegions`,
+            url: `${location.origin}/PreSales/PreSaleRegions`,
             success: function (data) {
                 if (preSaleRegion[0].length < 2) {
                     $.each(data,
@@ -145,5 +145,5 @@ function getPreSaleDto(preSale) {
 }
 
 function downloadFile() {
-    window.location.href = `${api}/api/PreSales/GetPreSaleRept/${window.preSaleGroupId}`;
+    window.location.href = `${location.origin}/PreSales/GetPreSaleRept/${window.preSaleGroupId}`;
 }

@@ -26,7 +26,7 @@ function initPreSaleAccessListTable() {
         },
         "ajax": {
             "type": "GET",
-            "url": `${api}/api/PreSales/GroupAccess/${window.preSaleGroupId}`,
+            "url": `${location.origin}/PreSales/GroupAccess/${window.preSaleGroupId}`,
             "dataSrc": function (json) {
                 return json;
             },
@@ -63,7 +63,7 @@ function reloadUsers() {
     users.empty();
 
     $.ajax({
-        url: `${api}/api/Users/IdsAndNames/Active`,
+        url: `${location.origin}/Users/IdsAndNames/Active`,
         success: function (data) {
             $.each(data, function (idx, a) {
                 users.append(new Option(a.displayName, a.id));

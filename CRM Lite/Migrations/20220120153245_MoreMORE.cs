@@ -135,17 +135,17 @@ namespace CRM_Lite.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Organization = table.Column<string>(type: "text", nullable: false),
-                    FullName = table.Column<string>(type: "text", nullable: false),
-                    JobTitle = table.Column<string>(type: "text", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    Site = table.Column<string>(type: "text", nullable: false),
-                    RequestSent = table.Column<string>(type: "text", nullable: false),
-                    IncomingNumber = table.Column<string>(type: "text", nullable: false),
-                    ExecutorContact = table.Column<string>(type: "text", nullable: false),
-                    Comments = table.Column<string>(type: "text", nullable: false),
-                    ResultComments = table.Column<string>(type: "text", nullable: false),
+                    Organization = table.Column<string>(type: "text", nullable: true),
+                    FullName = table.Column<string>(type: "text", nullable: true),
+                    JobTitle = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    Site = table.Column<string>(type: "text", nullable: true),
+                    RequestSent = table.Column<string>(type: "text", nullable: true),
+                    IncomingNumber = table.Column<string>(type: "text", nullable: true),
+                    ExecutorContact = table.Column<string>(type: "text", nullable: true),
+                    Comments = table.Column<string>(type: "text", nullable: true),
+                    ResultComments = table.Column<string>(type: "text", nullable: true),
                     RegionId = table.Column<Guid>(type: "uuid", nullable: true),
                     ResponsibleUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     DayAppointment = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -153,9 +153,6 @@ namespace CRM_Lite.Migrations
                     ResultId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ChangedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedByUserId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ChangedByUserId = table.Column<Guid>(type: "uuid", nullable: true),
-                    IsVisible = table.Column<bool>(type: "boolean", nullable: false),
                     GroupId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
@@ -180,16 +177,6 @@ namespace CRM_Lite.Migrations
                         name: "FK_PreSales_PreSaleStatuses_StatusId",
                         column: x => x.StatusId,
                         principalTable: "PreSaleStatuses",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_PreSales_Users_ChangedByUserId",
-                        column: x => x.ChangedByUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_PreSales_Users_CreatedByUserId",
-                        column: x => x.CreatedByUserId,
-                        principalTable: "Users",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PreSales_Users_ResponsibleUserId",
@@ -217,16 +204,6 @@ namespace CRM_Lite.Migrations
                 name: "IX_PreSaleGroups_StatusId",
                 table: "PreSaleGroups",
                 column: "StatusId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PreSales_ChangedByUserId",
-                table: "PreSales",
-                column: "ChangedByUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PreSales_CreatedByUserId",
-                table: "PreSales",
-                column: "CreatedByUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PreSales_GroupId",
