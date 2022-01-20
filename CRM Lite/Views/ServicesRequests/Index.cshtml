@@ -1,0 +1,175 @@
+﻿
+@{
+    ViewData["Title"] = "Список заявок на услуги";
+}
+
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i>
+                </div>
+                <div class="card-body">
+                    <table id="product-request-table" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>Название</th>
+                                <th>Условия размещения</th>
+                                <th>Дата создания</th>
+                                <th>Дата исполнения заявки</th>
+                                <th>Ответственный сейл</th>
+                                <th>Ответственный / МП</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/lib/datatables/datatables.min.css" />
+}
+
+@section Scripts {
+
+    <script type="text/javascript" src="~/lib/datatables/datatables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            const table = $('#product-request-table').DataTable({
+                "language": {
+                    "url": "/lib/datatables/datatables.language.russian.json"
+                },
+                "processing": true,  
+                "serverSide": true,   
+                "filter": true,    
+                "orderMulti": false,
+                "ajax": {
+                    "type": "GET",
+                    "url": `${api}/api/ServicesRequests/ForList/${user.id}`,
+                    "dataSrc": function (json) {
+
+                        console.log(json);
+
+                        return json.data;
+                    }
+                },
+                "columns": [
+                    { "data": "id" },
+                    { "data": "name" },
+                    { "data": "service" },
+                    {
+                        "data": "preparationDate",
+                        "sType": "ruDate",
+                        "mRender": function (data, type, full) {
+                            if (type === 'sort' && data === "Не указана") return '31.12.9999';
+                            return data;
+                        }
+                    },
+                    { "data": "finishDate" },
+                    { "data": "responsibleUser" },
+                    { "data": "responsiblePm" }
+                ],
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }
+                ]
+            });
+
+            $('#product-request-table').on('click',
+                'tbody tr',
+                function() {
+                    window.open(`/ServicesRequests/ServicesRequest/${(table.row(this).data()).id}`, '_blank');
+                });
+            $('#product-request-table tbody').hover(function() {
+                $(this).css('cursor', 'pointer');
+            });
+
+            extendSortFunction();
+        });
+
+        function FormatDate(data) {
+
+            var date = new Date(data)
+            var dd = date.getDate();
+            var mm = date.getMonth() + 1;
+            var yy = date.getFullYear();
+
+            dd = checkTime(dd);
+            mm = checkTime(mm);
+
+            const resDate = dd + '-' + mm + '-' + yy;
+            return resDate == "01-01-1970" ? "Не указана" : resDate;
+        }
+
+        function checkTime(i) {
+            if (i < 10)
+                i = "0" + i;
+            return i;
+        }
+
+        function extendSortFunction() {
+
+            jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+                "ruDate-asc": function (a, b) {
+                    var ruDatea = $.trim(a).split('.');
+                    var ruDateb = $.trim(b).split('.');
+
+                    if (ruDatea[2] * 1 < ruDateb[2] * 1)
+                        return 1;
+                    if (ruDatea[2] * 1 > ruDateb[2] * 1)
+                        return -1;
+                    if (ruDatea[2] * 1 == ruDateb[2] * 1) {
+                        if (ruDatea[1] * 1 < ruDateb[1] * 1)
+                            return 1;
+                        if (ruDatea[1] * 1 > ruDateb[1] * 1)
+                            return -1;
+                        if (ruDatea[1] * 1 == ruDateb[1] * 1) {
+                            if (ruDatea[0] * 1 < ruDateb[0] * 1)
+                                return 1;
+                            if (ruDatea[0] * 1 > ruDateb[0] * 1)
+                                return -1;
+                        }
+                        else
+                            return 0;
+                    }
+                },
+
+                "ruDate-desc": function (a, b) {
+                    var ruDatea = $.trim(a).split('.');
+                    var ruDateb = $.trim(b).split('.');
+
+                    if (ruDatea[2] * 1 < ruDateb[2] * 1)
+                        return -1;
+                    if (ruDatea[2] * 1 > ruDateb[2] * 1)
+                        return 1;
+                    if (ruDatea[2] * 1 == ruDateb[2] * 1) {
+                        if (ruDatea[1] * 1 < ruDateb[1] * 1)
+                            return -1;
+                        if (ruDatea[1] * 1 > ruDateb[1] * 1)
+                            return 1;
+                        if (ruDatea[1] * 1 == ruDateb[1] * 1) {
+                            if (ruDatea[0] * 1 < ruDateb[0] * 1)
+                                return -1;
+                            if (ruDatea[0] * 1 > ruDateb[0] * 1)
+                                return 1;
+                        }
+                        else
+                            return 0;
+                    }
+                }
+            });
+        }
+    </script>
+}
+
+

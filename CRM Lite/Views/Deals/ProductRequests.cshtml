@@ -1,0 +1,202 @@
+﻿
+@{
+    ViewData["Title"] = "Список заявок на продуктирование";
+}
+
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i>
+                </div>
+                <div class="card-body">
+                    <table id="product-request-table" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>Название</th>
+                                <th>Задачи</th>
+                                <th>Дата создания</th>
+                                <th>Плановая дата исполнения</th>
+                                <th>Фактическая дата исполнения</th>
+                                <th>Ответственный сейл</th>
+                                <th>Ответственный продакт</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/lib/datatables/datatables.min.css" />
+}
+
+@section Scripts {
+
+    <script type="text/javascript" src="~/lib/datatables/datatables.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var dealId = location.href.split('/')[location.href.split('/').length - 1];
+            const table = $('#product-request-table').DataTable({
+                "language": {
+                    "url": "/lib/datatables/datatables.language.russian.json"
+                },
+
+                "ajax": {
+                    "type": "GET",
+                    "url": `${api}/api/ProductRequests/Deal/${dealId}`,
+                    "dataSrc": function (json) {
+                        json.map((p) => {
+                            p.quests = p.quests.map(q => q.quest).join(", ");
+
+                            p.vendorsRequests =
+                                p.vendorsRequests.map((vendor) => vendor.responsible.displayName).join(", ");
+                            p.responsibleUser = p.responsibleUser === null ? "" : p.responsibleUser.displayName;
+                            p.creationDate = FormatDate(p.creationDate);
+                            p.answerDate = FormatDate(p.answerDate);
+                            p.finishDate = FormatDate(p.finishDate);
+                        });
+
+                        console.log(json);
+
+                        return json;
+                    }
+                },
+                "columns": [
+                    {
+                        "data": "id",
+                        "className": "id"
+                    },
+                    { "data": "name" },
+                    { "data": "quests" },
+                    { "data": "creationDate" },
+                    { "data": "answerDate" },
+                    { "data": "finishDate" },
+                    { "data": "responsibleUser" },
+                    { "data": "vendorsRequests" },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            var name = data.name === null ? "" : data.name.replace(/"/g, '&quot;');
+                            return '<button id=' + data.id + ' class="btn remove" onclick="deleteProductRequest(\'' + data.id + '\', \'' + name + '\')"><i class="fa fa-times text-danger remove" aria-hidden="true"></i></button>';
+                        }
+                    }
+                ],
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }
+                ],
+                "createdRow": function (row, data, dataIndex) {
+                    if (data.name === "Заявка из старой CRM")
+                        $(row).addClass('oldRequest');
+                    else
+                        $(row).addClass('newRequest');
+                }
+            });
+
+            $('#product-request-table').on('click',
+                'tbody .newRequest',
+                function (e) {
+                    if (!$(e.target).hasClass('remove'))
+                        window.open(`/ProductRequests/ProductRequest/${(table.row(this).data()).id}`, '_blank');
+                });
+
+            $('#product-request-table').on('click',
+                'tbody .oldRequest',
+                function (e) {
+                    if (!$(e.target).hasClass('remove'))
+                        window.open(`/ProductRequests/OldProductRequest/${(table.row(this).data()).id}`, '_blank');
+                });
+
+            $('#product-request-table tbody').hover(function () {
+                $(this).css('cursor', 'pointer');
+            });
+
+            $.ajax({
+                type: 'GET',
+                url: `${api}/api/ProductRequests/OldRequests/ForList/${dealId}`,
+                success: function (data) {
+                    if (data != undefined) {
+                        table.row.add({
+                            "id": data.id,
+                            "name": "Заявка из старой CRM",
+                            "quests": data.productAims,
+                            "creationDate": "Не указана",
+                            "answerDate": "Не указана",
+                            "finishDate": "Не указана",
+                            "responsibleUser": "Не указан",
+                            "vendorsRequests": data.vendorNames
+                        });
+                    }
+
+                    table.draw();
+                }
+            });
+        });
+
+        var deleteProductRequest = (id, name) => {
+            if (confirm('Вы действительно хотите удалить заявку на продуктирование \"' + name + '\"?'))
+                $.ajax({
+                    type: "PUT",
+                    url: `${api}/api/ProductRequests/MakeInvisible/${id}`,
+                    success: function (data) {
+                        var table = $('#product-request-table').DataTable();
+                        table
+                            .row($('#' + id).parents('tr'))
+                            .remove()
+                            .draw();
+                    },
+                    error: function (data) {
+                        if (data.status === 403) {
+                            swal({
+                                title: "У Вас нет доступа к данному объекту!",
+                                icon: "error",
+                                button: "Ok"
+                            });
+                            return;
+                        } else {
+                            swal({
+                                title: "Неизвестная ошибка, обратитесь к администратору системы",
+                                icon: "error",
+                                button: "Ok"
+                            });
+                        }
+                    },
+                });
+        };
+
+        function FormatDate(data) {
+
+            var date = new Date(data);
+            var dd = date.getDate();
+            var mm = date.getMonth() + 1;
+            var yy = date.getFullYear();
+
+            dd = checkTime(dd);
+            mm = checkTime(mm);
+
+            const resDate = dd + '-' + mm + '-' + yy;
+            return resDate == "01-01-1970" ? "Не указана" : resDate;
+        }
+
+        function checkTime(i) {
+            if (i < 10)
+                i = "0" + i;
+            return i;
+        }
+    </script>
+}
+
+

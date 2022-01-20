@@ -1,0 +1,14 @@
+﻿.modal {
+    display: none;
+    background: rgba(0, 0, 0, .30);
+    z-index: 1020;
+}
+
+.modal .modal-dialog {
+    position: relative;
+    margin: 30px auto;
+    width: 80%;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+}

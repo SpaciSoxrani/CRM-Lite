@@ -1,0 +1,417 @@
+﻿﻿@{
+	ViewData["Name"] = "Мероприятия";
+
+}
+<script>
+
+    function Auto(e) {
+        $(e).autoNumeric('init', { aSep: ' ', aDec: ',' });
+    }
+
+/**/</script>
+
+<form id="deal">
+	<div class="animated fadeIn">
+		<div class="card">
+			<div class="card-body">
+				<fieldset>
+					<legend>Формат мероприятия</legend>
+					<div class="row">
+						<div class="form-group col-md-2">
+							<label for="event-type">Тип мероприятия</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="event-type"></select>
+						</div>
+
+						<div class="form-group col-md-2">
+							<label for="format">Формат участия</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="format"></select>
+						</div>
+
+						<div class="form-group col-md-2">
+							<label for="marketing-lists">Маркетинговые списки</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="marketing-lists"></select>
+						</div>
+
+
+						<div class="form-group col-md-2">
+							<label for="area-estimate">Оценка площадки</label>
+							<br />
+							<input type="number"
+								   step="10" min="0" max="100" value="50" id="area-estimate" style="text-align:center;" />
+						</div>
+
+						<div class="form-group col-md-2">
+							<label for="personal-estimate">Оценка сотрудников ГК ХОСТ</label>
+							<br />
+							<input type="number"
+								   step="10" min="0" max="100" value="50" id="personal-estimate" style="text-align:center;" />
+						</div>
+
+						<div class="form-group col-md-2">
+							<label for="marketing-work-estimate">Оценка работы отдела маркетинга</label>
+							<br />
+							<input type="number"
+								   step="10" min="0" max="100" value="50" id="marketing-work-estimate" style="text-align:center;" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group col-md-12">
+							<label for="motiv">Мотив участия</label>
+							<br />
+							<input id="motiv" style="width:100%; height:2.5em;" type="text" class="form-control" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group col-md-3">
+							<br />
+							<label class="switch switch-3d switch-primary">
+								<input id="is-recognizability"
+									   type="checkbox"
+									   class="switch-input">
+								<span class="switch-label"></span>
+								<span class="switch-handle"></span>
+							</label>
+							<label for="is-recognizability">Узнаваемость</label>
+						</div>
+
+						<div class="form-group col-md-3">
+							<br />
+							<label class="switch switch-3d switch-primary">
+								<input id="is-need-formation"
+									   type="checkbox"
+									   class="switch-input">
+								<span class="switch-label"></span>
+								<span class="switch-handle"></span>
+							</label>
+							<label for="is-need-formation">Формирование потребности</label>
+						</div>
+
+						<div class="form-group col-md-3">
+							<br />
+							<label class="switch switch-3d switch-primary">
+								<input id="is-increase-loyalty"
+									   type="checkbox"
+									   class="switch-input">
+								<span class="switch-label"></span>
+								<span class="switch-handle"></span>
+							</label>
+							<label for="is-increase-loyalty">Увеличение лояльности</label>
+						</div>
+
+						<div class="form-group col-md-3">
+							<br />
+							<label class="switch switch-3d switch-primary">
+								<input id="is-market-research"
+									   type="checkbox"
+									   class="switch-input">
+								<span class="switch-label"></span>
+								<span class="switch-handle"></span>
+							</label>
+							<label for="is-market-research">Изучение рынка</label>
+						</div>
+					</div>
+
+				</fieldset>
+				<br />
+				<div id="recognizability" style="display:none;  align-items: center;">
+					<fieldset>
+						<legend>Узнаваемость</legend>
+						<div class="row">
+							<div class="form-group col-md-2">
+								<label for="recognizability-planned-peoples-count">Кол-во человек (план)</label>
+								<br />
+								<input type="number" min="0" value="0" id="recognizability-planned-peoples-count" style="text-align:center;" />
+							</div>
+
+							<div class="form-group col-md-2">
+								<label for="recognizability-fact-peoples-count">Кол-во человек (факт)</label>
+								<br />
+								<input type="number" min="0" value="0" id="recognizability-fact-peoples-count" style="text-align:center;" />
+							</div>
+
+							<div class="form-group col-md-2">
+								<label for="recognizability-planned-contacts-count">Планируемое кол-во контактов</label>
+								<br />
+								<input type="number" min="0" value="0" id="recognizability-planned-contacts-count" style="text-align:center;" />
+							</div>
+
+							<div class="form-group col-md-2">
+								<label for="recognizability-fact-contacts-count">Фактическое кол-во контактов</label>
+								<br />
+								<input type="number" min="0" value="0" id="recognizability-fact-contacts-count" style="text-align:center;" />
+							</div>
+
+							<div class="form-group col-md-3">
+								<br />
+								<label class="switch switch-3d switch-primary">
+									<input id="is-waited"
+										   type="checkbox"
+										   class="switch-input">
+									<span class="switch-label"></span>
+									<span class="switch-handle"></span>
+								</label>
+								<label for="is-waited">Соответсвие ожиданиям</label>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+
+				<div id="need-formation" style="display:none;  align-items: center;">
+					<fieldset>
+						<legend>Формирование потребности</legend>
+						<div class="row">
+							<div class="form-group col-md-3">
+								<label for="need-formation-planned-sum">Планируемая сумма сделок</label>
+								<br />
+								<input onkeydown="Auto(this)" id="need-formation-planned-sum" style="width:100%; height:2.5em;" type="text" class="form-control" />
+							</div>
+
+							<div class="form-group col-md-3">
+								<label for="need-formation-fact-sum">Фактическая сумма сделок</label>
+								<br />
+								<input onkeydown="Auto(this)" id="need-formation-fact-sum" style="width:100%; height:2.5em;" type="text" class="form-control" />
+							</div>
+
+							<div class="form-group col-md-3">
+								<label for="need-formation-planned-contacts-count">Планируемое кол-во контактов</label>
+								<br />
+								<input type="number" min="0" value="0" id="need-formation-planned-contacts-count" style="text-align:center;" />
+							</div>
+
+							<div class="form-group col-md-3">
+								<label for="need-formation-fact-contacts-count">Фактическое кол-во контактов</label>
+								<br />
+								<input type="number" min="0" value="0" id="need-formation-fact-contacts-count" style="text-align:center;" />
+							</div>
+						</div>
+					</fieldset>
+				</div>
+
+				<div id="increase-loyalty" style="display:none; align-items: center;">
+					<fieldset>
+						<legend>Увеличение лояльности</legend>
+						<div class="row">
+							<div class="form-group col-md-3">
+								<label for="increase-loyalty-planned-sum">Планируемая сумма сделок</label>
+								<br />
+								<input onkeydown="Auto(this)" id="need-formation-planned-sum" style="width:100%; height:2.5em;" type="text" class="form-control" />
+							</div>
+
+							<div class="form-group col-md-3">
+								<label for="increase-loyalty-fact-sum">Фактическая сумма сделок</label>
+								<br />
+								<input onkeydown="Auto(this)" id="need-formation-fact-sum" style="width:100%; height:2.5em;" type="text" class="form-control" />
+							</div>
+
+							<div class="form-group col-md-2">
+								<label for="increase-loyalty-planned-contacts-count">Средний индекс NPS</label>
+								<br />
+								<input type="number" min="0" value="0" id="need-formation-index-NPS" style="text-align:center;" />
+							</div>
+
+							<div class="form-group col-md-2">
+								<label for="increase-loyalty-planned-contacts-count">Планируемое кол-во контактов</label>
+								<br />
+								<input type="number" min="0" value="0" id="need-formation-planned-contacts-count" style="text-align:center;" />
+							</div>
+
+							<div class="form-group col-md-2">
+								<label for="increase-loyalty-fact-contacts-count">Фактическое кол-во контактов</label>
+								<br />
+								<input type="number" min="0" value="0" id="need-formation-fact-contacts-count" style="text-align:center;" />
+							</div>
+						</div>
+					</fieldset>
+				</div>
+
+				<div id="market-research" style="display:none; align-items: center;">
+					<fieldset>
+						<legend>Изучение рынка</legend>
+						<div class="row">
+							<div class="form-group col-md-2">
+								<label for="increase-loyalty-planned-contacts-count">Планируемое кол-во контактов</label>
+								<br />
+								<input type="number" min="0" value="0" id="market-research-planned-contacts-count" style="text-align:center;" />
+							</div>
+
+							<div class="form-group col-md-2">
+								<label for="increase-loyalty-fact-contacts-count">Фактическое кол-во контактов</label>
+								<br />
+								<input type="number" min="0" value="0" id="market-research-fact-contacts-count" style="text-align:center;" />
+							</div>
+
+						</div>
+
+						<div class="row" style="padding:15px;">
+							<label for="market-research-conclusion">Выводы</label>
+							<br />
+							<textarea class="form-control" id="market-research-conclusion"></textarea>
+						</div>
+					</fieldset>
+				</div>
+
+				<div id="info" style="align-items: center;">
+					<fieldset>
+						<legend>Сведения</legend>
+
+						<div class="row" style="padding:15px;">
+							<label for="comments">Комментарии</label>
+							<br />
+							<textarea class="form-control" id="comments"></textarea>
+						</div>
+
+						<div class="row" style="justify-content:center">
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="event-program" class="small">
+										Программа мероприятия
+									</label>
+									<br />
+									<form style="display: inline-block" class="dropzone" id="event-program">
+										<input type="button" class="btn dz-default dz-message upload-btn" value="Загрузить файл" />
+									</form>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="event-estimate" class="small">
+										Смета мероприятия
+									</label>
+									<br />
+									<form style="display: inline-block" class="dropzone" id="event-estimate">
+										<input type="button" class="btn dz-default dz-message upload-btn" value="Загрузить файл" />
+									</form>
+								</div>
+							</div>
+
+						</div>
+					</fieldset>
+				</div>
+
+				<div id="effect" style="align-items: center;">
+					<fieldset>
+						<legend>Оценка эффективности</legend>
+
+						<div class="row" style="padding:15px;">
+							<div class="form-group col-md-2">
+								<label for="aim-recognizability">Достижение цели «Узнаваемость»</label>
+								<br />
+								<input disabled type="number" min="0" value="0" id="aim-recognizability" style="text-align:center;" />
+							</div>
+
+							<div class="form-group col-md-2">
+								<label for="aim-need-formation">Достижение цели «Формирование потребности»</label>
+								<br />
+								<input disabled type="number" min="0" value="0" id="aim-need-formation" style="text-align:center;" />
+							</div>
+
+							<div class="form-group col-md-2">
+								<label for="aim-increase-loyalty">Достижение цели «Повышение лояльности»</label>
+								<br />
+								<input disabled type="number" min="0" value="0" id="aim-increase-loyalty" style="text-align:center;" />
+							</div>
+							<div class="form-group col-md-2">
+								<label for="internal-om-evaluation">Внутренняя оценка ОМ</label>
+								<br />
+								<input disabled type="number" min="0" value="0" id="internal-om-evaluation" style="text-align:center;" />
+							</div>
+
+							<div class="form-group col-md-2">
+								<label for="roi-effect">Экономическая эффективность (ROI)</label>
+								<br />
+								<input disabled type="number" min="0" value="0" id="roi-effect" style="text-align:center;" />
+							</div>
+
+							<div class="form-group col-md-2">
+								<label for="total-event-effect">Общая эффективность мероприятия</label>
+								<br />
+								<input disabled type="number" min="0" value="0" id="total-event-effect" style="text-align:center;" />
+							</div>
+						</div>
+					</fieldset>
+				</div>
+
+			</div>
+
+			<div class="card-footer">
+				<div class="form-actions text-center">
+					<input id="cancel" type="button" class="btn btn-secondary" value="Отменить">
+					<input id="submit" onclick="" type="button" class="btn btn-primary" value="Сохранить">
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+@section Scripts {
+	<script src="~/lib/select2/select2.min.js"></script>
+
+	<script src="~/js/Marketing/event.js" asp-append-version="true"></script>
+
+	<script src="~/lib/autonumeric/autoNumeric-2.0-BETA.js"></script>
+
+
+	<script>
+		$("select").select2({
+			placeholder: "Выберите элемент",
+			allowClear: true
+		});
+	</script>
+}
+
+@section Styles {
+	<link href="~/lib/select2/select2.min.css" rel="stylesheet" />
+
+	<style>
+
+		.dropzone {
+			width: 13rem;
+			min-height: 3em !important;
+			height: 3em;
+			border-color: #fff;
+			padding: 0px;
+			pointer-events: none;
+		}
+
+		.upload-btn {
+			margin: 0 !important;
+			pointer-events: all /*!important*/;
+			text-align: center;
+			font-size: 13px;
+			text-decoration: none;
+			font-weight: 700;
+			padding: 3px 6px;
+			background: #eaeef1;
+			display: block;
+			width: 160px;
+			background-image: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,.1));
+			border-radius: 3px;
+			color: rgba(0,0,0,.6);
+			text-shadow: 0 1px 1px rgba(255,255,255,.7);
+			box-shadow: 0 0 0 1px rgba(0,0,0,.2), 0 1px 2px rgba(0,0,0,.2), inset 0 1px 2px rgba(255,255,255,.7);
+		}
+
+		.download-btn {
+			text-align: center;
+			font-size: 13px;
+			color: #fff;
+			text-decoration: none;
+			font-weight: 500;
+			padding: 3px 6px;
+			background: #20a8d8;
+			display: block;
+			width: 120px;
+			border-radius: 3px;
+			box-shadow: 0 0 0 1px rgba(0,0,0,.2), 0 1px 2px rgba(0,0,0,.2), inset 0 1px 2px rgba(255,255,255,.7);
+			cursor: pointer !important;
+		}
+	</style>
+}
+
+

@@ -1,0 +1,172 @@
+﻿<nav class="sidebar-nav">
+    <ul class="nav">
+
+        <li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i>Контакты</a>
+            <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Contacts" asp-action="Index" asp-route-view=""><i class="fa fa-windows"></i>Список</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Contacts/Contact"><i class="icon-speech"></i>Создать</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i>Организации</a>
+            <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Organizations" asp-action="Index" asp-route-view=""><i class="fa fa-windows"></i>Список</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Organizations/Organization"><i class="icon-speech"></i>Создать</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i>Сделки</a>
+            <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Deals" asp-action="List" asp-route-view=""><i class="fa fa-windows"></i>Список</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Deals/Deal"><i class="icon-speech"></i>Создать</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i>Отчетность</a>
+            <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Deals" asp-action="Statements" asp-route-view=""><i class="icon-puzzle"></i>Воронка продаж</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Deals" asp-action="PlanStatements" asp-route-view=""><i class="icon-puzzle"></i>Прогноз продаж</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i>Заявки</a>
+            <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="ProductRequests" asp-action="Index" asp-route-view=""><i class="fa fa-windows"></i>Заявки на продуктирование</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="ServicesRequests" asp-action="Index" asp-route-view=""><i class="fa fa-windows"></i>Заявки на услуги</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i>Интересы</a>
+            <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Interest" asp-action="Index" asp-route-view=""><i class="fa fa-windows"></i>Список</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Interest/Interest"><i class="icon-speech"></i>Создать</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i>Маркетинг</a>
+            <ul class="nav-dropdown-items">
+
+                @*
+        <li class="nav-item nav-dropdown">
+            <a class="nav-link" asp-controller="Campaigns" asp-action="MailingList" asp-route-view=""><i class="fa fa-speech"></i>Маркетинговые списки</a>
+        </li>
+                *@
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="PreSales" asp-action="Index" asp-route-view=""><i class="fa fa-windows"></i>Pre-sale</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Leads" asp-action="Index" asp-route-view=""><i class="fa fa-windows"></i>Лиды</a>
+                </li>
+                @*<li class="nav-item nav-dropdown">
+            <a class="nav-link" asp-controller="Campaigns" asp-action="EmailTemplate" asp-route-view=""><i class="fa fa-speech"></i>Конструктор писем</a>
+        </li>*@
+                @*<li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i>Маркетинговые кампании</a>
+            <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Campaigns" asp-action="Campaign" asp-route-view=""><i class="fa fa-speech"></i>Создать</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Campaigns" asp-action="Campaign" asp-route-view=""><i class="fa fa-speech"></i>Список МК</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i>Конструктор шаблонов писем</a>
+            <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Campaigns" asp-action="Campaign" asp-route-view=""><i class="fa fa-speech"></i>Создать</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Campaigns" asp-action="Campaign" asp-route-view=""><i class="fa fa-speech"></i>Список шаблонов</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Campaigns" asp-action="Event" asp-route-view=""><i class="fa fa-speech"></i>Отчётность по итогам рассылки</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Campaigns" asp-action="PR" asp-route-view=""><i class="fa fa-speech"></i>Отчётность по итогам МК</a>
+        </li>*@
+            </ul>
+        </li>
+        <li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i>Админ панель</a>
+            <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Vendors" asp-action="Index" asp-route-view=""><i class="icon-speech"></i>Вендоры</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="ProductLines" asp-action="Index" asp-route-view=""><i class="icon-speech"></i>Направления</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="DealTypes" asp-action="Index" asp-route-view=""><i class="icon-speech"></i>Типы сделок</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Departments" asp-action="Index" asp-route-view=""><i class="icon-speech"></i>Подразделения</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Admin" asp-action="RolePage" asp-route-view=""><i class="icon-speech"></i>Роли пользователей</a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Kanban" asp-action="Index" asp-route-view=""><i class="icon-puzzle"></i>Канбан</a>
+        </li>
+        <li class="nav-item nav-dropdown mt-auto">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i>Справочник</a>
+            <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                    <a class="nav-link" href="https://people.hostco.ru/Questions/Crm"><i class="icon-speech"></i>Инструкции</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="nav-item nav-dropdown">
+            <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-puzzle"></i>Обратная связь</a>
+            <ul class="nav-dropdown-items">
+                <li class="nav-item">
+                    <a class="nav-link" href="mailto:crm_admins@hostco.ru?subject=Ошибки"><i class="icon-speech"></i>Ошибки</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="mailto:crm_admins@hostco.ru?subject=Улучшения"><i class="icon-speech"></i>Улучшения</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="mailto:crm_admins@hostco.ru?subject=Вопросы"><i class="icon-speech"></i>Вопросы</a>
+                </li>
+            </ul>
+        </li>
+        @*<li class="nav-item">
+            <a class="nav-link" asp-controller="Mosaico" asp-action="Index" asp-route-view=""><i class="icon-puzzle"></i>Mosaico</a>
+        </li>*@
+    </ul>
+</nav>
+
+	

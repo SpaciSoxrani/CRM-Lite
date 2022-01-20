@@ -1,0 +1,20 @@
+﻿var filterElementsMap = new Map([
+    ["step-filter", "[data-id=step-filter]"],
+    ["status-filter", "[data-id=status-filter]"],
+    ["sales-office-filter", "[data-id=sales-office-filter]"],
+    ["sale-filter", "[data-id=sale-filter]"],
+    ["organization-filter", "[data-id=organization-filter]"],
+    ["contact-filter", "[data-id=contact-filter]"],
+    ["responsible-mp-filter", "[data-id=responsible-mp-filter]"],
+    ["responsible-product-filter", "[data-id=responsible-product-filter]"],
+    ["expected-margin-from", "#expected-margin-button"],
+    ["expected-margin-to", "#expected-margin-button"],
+    ["expert-margin-from", "#expert-margin-button"],
+    ["expert-margin-to", "#expert-margin-button"],
+    ["department-sales-filter", "#department-button"],
+    ["department-industrial-filter", "#department-button"],
+    ["contract-date", "#contract-date"],
+    ["contract-date-filter", "#contract-date"],
+    ["contract-date-filter-from", "#contract-date"],
+    ["contract-date-filter-to", "#contract-date"]
+]);

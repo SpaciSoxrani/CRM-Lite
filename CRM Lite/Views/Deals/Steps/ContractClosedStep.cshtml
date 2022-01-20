@@ -1,0 +1,74 @@
+﻿@model CRM.UI.Models.DealViewModel
+
+<div>
+    @* /////////////////////////// files /////////////////////////////////////////// *@
+    <div id="all-files-7" class="modal">
+        <div class="modal-dialog animated" style="max-width:60% !important">
+            <div class="modal-content" style="overflow: scroll;">
+
+                <div class="modal-header">
+                    <strong>Список файлов</strong>
+                </div>
+
+                <div class="row" id="files-content-7" style="padding:15px; align-items:center; justify-content: center;">
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-default" id="close" type="button" onclick="modal.close()">Закрыть</button>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+    @* ////////////////////////////////////////////////////////////////////// *@
+<div class="row col">
+    <div class="form-inline col-auto">
+        <label for="hint-contract-works-probability" style="margin-right: 1rem;">Вероятность </label>
+        <input type="text" value="100%" class="form-control"
+               style="width: 25%;"
+               id="hint-contract-works-probability" readonly />
+    </div>
+
+    <div class="form-inline col-auto">
+
+        <label for="hint-contract-works-status" style="margin-right: 1rem;">Статус сделки </label>
+
+
+        <input type="text" value="Активная" class="form-control deal-status"
+               id="hint-contract-works-status" readonly />
+    </div>
+
+    @if (Model != null && Model.IsClosed && Model.ClosureDate.HasValue)
+    {
+        <div class="form-inline col-auto">
+            <label style="margin-right: 1rem;">Дата закрытия сделки</label>
+            <input readonly class="form-control" type="text" value="@(Model?.ClosureDate.GetValueOrDefault().ToShortDateString())" />
+        </div>
+    }
+
+    <div class="form-inline row col-auto put-off-and-close @(Model?.StepName == "Контракт закрыт" ? "" : "d-none")">
+        <div class="col-auto">
+            <input id="put-off-deal" type="button" onclick="modalPutOff.open()" class="btn btn-primary put-off-deal" value="Отложить сделку">
+        </div>
+        <div class="">
+            <input onclick="acceptToCloseDeal()" type="button" style="display: none;" class="btn btn-primary accept-closing-deal" value="Согласовать закрытие сделки">
+        </div>
+        <div class="">
+            <input id="submit" onclick="reopenDeal()" type="button" style="display: none;" class="btn btn-primary reopen-deal" value="Возобновить сделку">
+        </div>
+        <div class="col">
+            <input type="button" onclick="modalFinishDeal.open();" class="btn btn-primary finish-deal" value="Закрыть сделку">
+        </div>
+    </div>
+
+    <div class="form-inline col-auto">
+        <input type="button" onclick="GetAllFiles(7)" class="btn btn-primary files-on-closed-step" value="Прикрепленные файлы" />
+    </div>
+</div>
+</div>
+
+

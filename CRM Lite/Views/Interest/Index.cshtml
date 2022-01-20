@@ -1,0 +1,146 @@
+﻿
+@{
+    ViewData["Name"] = "Список интересов";
+}
+
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i>
+                </div>
+                <div class="card-body">
+                    <table id="interest-table" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>Краткое название</th>
+                                <th>Контакт</th>
+                                <th>Описание</th>
+                                <th>Квалификация интереса</th>
+                                <th>Ответственный</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+
+                    </table>
+                    <div class="row" style="justify-content:center;">
+                        <a class="btn btn-primary" asp-action="Interest">Добавить интерес</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/lib/datatables/datatables.min.css" />
+}
+
+@section Scripts {
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript" src="~/lib/datatables/datatables.min.js"></script>
+    <script type="text/javascript">
+		$(document).ready(function () {
+			const table = $('#interest-table').DataTable({
+				"language": {
+					"url": "/lib/datatables/datatables.language.russian.json"
+				},
+
+				"ajax": {
+					"type": "GET",
+					"url": `${api}/api/SalesInterestsForList`,
+					"dataSrc": function (json) {
+						return json;
+					}
+				},
+				"columns": [
+                    {
+                        "data": "id",
+                        "className": "id"
+                    },
+					{ "data": "name" },
+					{ "data": "contact" },
+					{ "data": "description" },
+					{ "data": "qualification" },
+                    { "data": "responsible" },
+                    {
+                        "data": null,
+                        "render": function(data, type, row) {
+                            return '<button id=' + data.id + ' class="btn remove" onclick="deleteSalesInterest(\'' + data.id + '\', \'' + data.name.replace(/"/g, '&quot;') + '\')">' +
+                                '<i class="fa fa-times text-danger" aria-hidden="true"></i>' +
+                                '</button>';
+                        }
+                    }
+				],
+				"columnDefs": [
+					{
+						"targets": [0],
+						"visible": false,
+						"searchable": false
+					}
+				]
+			});
+
+			$('#interest-table').on('click',
+				'tbody tr',
+                function (e) {
+                    if(!$(e.target).hasClass('remove'))
+					    $.ajax({
+						    type: "GET",
+						    url: `${api}/api/SalesInterest/${(table.row(this).data()).id}/${user.id}`, // the URL of the controller action method
+						    data: null, // optional data
+						    success: function (result) {
+							    window.location.href = `/Interest/Interest/${result.id}`;
+						    },
+						    error: function (req) {
+                                if (req.status === 403)
+                                    swal({
+                                        title: "У Вас нет доступа к данному объекту!",
+                                        icon: "error",
+                                        button: "Ok",
+                                    });
+                            }
+					    });
+				});
+			$('#interest-table tbody').hover(function () {
+				$(this).css('cursor', 'pointer');
+			});
+        });
+
+        var deleteSalesInterest = (id, name) => {
+            if (confirm('Вы действительно хотите удалить интерес \"' + name + '\"?'))
+                $.ajax({
+                    type: "PUT",
+                    url: `${api}/api/SalesInterest/MakeInvisible/${id}`,
+                    success: function (data) {
+                        var table = $('#interest-table').DataTable();
+                        table
+                            .row($('#' + id).parents('tr'))
+                            .remove()
+                            .draw();
+                    },
+                    error: function (data) {
+                        if (data.status === 403) {
+                            swal({
+                                title: "У Вас нет доступа к данному объекту!",
+                                icon: "error",
+                                button: "Ok"
+                            });
+                            return;
+                        } else {
+                            swal({
+                                title: "Неизвестная ошибка, обратитесь к администратору системы",
+                                icon: "error",
+                                button: "Ok"
+                            });
+                        }
+                    },
+                });
+        };
+    </script>
+}

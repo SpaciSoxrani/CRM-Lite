@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Name"] = "ReplaceFilePartial";
+}
+
+<div id="modal-replace-file" class="modal">
+    <div class="modal-dialog w-100 h-50">
+        <div class="modal-content h-100">
+            <form class="dropzone dz-clickable replace-files w-100 h-100 mb-5">
+                <div class="dz-message">
+                    <button type="button" class="dz-button">Загрузите файл вместо предыдущего</button>
+                </div>
+            </form>
+            <footer class="text-center">
+                <button class="btn btn-outline-blue" onclick="modalReplaceFile.close();">Отменить</button>
+            </footer>
+        </div>
+    </div>
+</div>

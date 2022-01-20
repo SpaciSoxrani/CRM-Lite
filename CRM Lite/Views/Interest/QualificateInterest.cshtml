@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewData["Name"] = "QualificateInterest";
+}
+
+<form id="pr">
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-body additionalInfo">
+                <fieldset>
+                    <legend>Сведения</legend>
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label for="interest-qualification">Квалификация интереса<span class="redColor">*</span></label>
+                            <br />
+                            <select class="form-control" style="width:100%; height:2.5em;" id="interest-qualification"></select>
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="main-contact">Лицо, принимающее решение<span class="redColor">*</span></label>
+                            <br />
+                            <select class="form-control" style="width:100%; height:2.5em;" id="main-contact"></select>
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="estimated-budget">Предварительный бюджет</label>
+                            <input onkeydown="Auto(this)"
+                                   id="estimated-budget" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-6" style="padding:15px;">
+                            <label for="client-tasks">Задача и потребности клиента<span class="redColor">*</span></label>
+                            <br />
+                            <textarea class="form-control" id="client-tasks"></textarea>
+                        </div>
+
+                        <div class="form-group col-md-3" style="padding:15px;">
+                            <label for="plans">Планы по реализации<span class="redColor">*</span></label>
+                            <br />
+                            <select class="form-control" style="width:100%; height:2.5em;" id="plans"></select>
+                        </div>
+
+                        <div class="form-group col-md-3" style="padding:15px;">
+                            <label for="product">Продукт для возможной сделки<span class="redColor">*</span></label>
+                            <br />
+                            <select class="form-control" style="width:100%; height:2.5em;" id="product"></select>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="card-footer">
+                <div class="form-actions text-center">
+                    <input id="submit" onclick="SaveInterest()" type="button" class="btn btn-primary" value="Сохранить">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Styles {
+    <link href="~/lib/select2/select2.min.css" rel="stylesheet" />
+
+    <style>
+        .required-field-group-highlighted {
+            outline: 2px solid red;
+        }
+
+        .redColor {
+            color: red;
+        }
+
+        .current-step-link {
+            outline: 1px dashed #20a8d8;
+        }
+    </style>
+}

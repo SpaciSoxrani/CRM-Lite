@@ -1,0 +1,174 @@
+﻿
+@{
+	ViewData["Name"] = "PR";
+}
+
+<form id="pr">
+	<div class="animated fadeIn">
+		<div class="card">
+			<div class="card-body additionalInfo">
+				<fieldset>
+					<legend>Сведения</legend>
+					<div class="row">
+						<div class="form-group col-md-3">
+							<label for="pr-type">Тип PR</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="pr-type" required></select>
+						</div>
+
+						<div class="form-group col-md-3">
+							<label for="heading">Рубрика</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="heading"></select>
+						</div>
+
+						<div class="form-group col-md-3">
+							<label for="header">Заголовок</label>
+							<br />
+							<input id="header" style="width:100%; height:2.5em;" type="text" class="form-control" required/>
+						</div>
+
+                        <div class="form-group col-md-1">
+                            <br />
+                            <label class="switch switch-3d switch-primary">
+                                <input id="is-publication"
+                                       type="checkbox"
+                                       class="switch-input">
+                                <span class="switch-label"></span>
+                                <span class="switch-handle"></span>
+                            </label>
+                            <label for="is-publication">Публикация</label>
+                        </div>
+                        
+                        <div class="col-md-2" style="justify-content: end">
+							<div class="form-group">
+								<label for="material" class="small">
+									Материал
+								</label>
+								<br />
+								<form style="display: inline-block" class="dropzone" id="material">
+									<input type="button" class="btn dz-default dz-message upload-btn" value="Загрузить файл" />
+								</form>
+							</div>
+						</div>
+                    </div>
+
+					<div class="row">
+						<div class="form-group col-md-6" style="padding:15px;">
+							<label for="content">Содержание</label>
+							<br />
+							<textarea class="form-control" id="content" required></textarea>
+						</div>
+
+						<div class="form-group col-md-6" style="padding:15px;">
+							<label for="comments">Комментарии</label>
+							<br />
+							<textarea class="form-control" id="comments"></textarea>
+						</div>
+					</div>
+				</fieldset>
+
+				<br />
+
+				<fieldset>
+					<legend>Маркетинговые списки</legend>
+					<div class="row">
+						<div class="form-group col-md-4">
+							<label for="planned-audience-сoverage">Планируемый охват аудитории</label>
+							<br />
+							<input type="number" id="planned-audience-сoverage" style="text-align:center;" required/>
+						</div>
+
+						<div class="form-group col-md-4">
+							<label for="fact-audience-сoverage">Фактический охват аудитории</label>
+							<br />
+							<input type="number" id="fact-audience-сoverage" style="text-align:center;" required/>
+						</div>
+
+						<div class="form-group col-md-4">
+							<label for="marketing-lists">Маркетинговые списки</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="marketing-lists"></select>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+
+			<div class="card-footer">
+				<div class="form-actions text-center">
+					<input id="cancel" type="button" class="btn btn-secondary" value="Отменить">
+					<input id="submit" onclick="saveCompany()" type="button" class="btn btn-primary" value="Сохранить">
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+@section Scripts {
+	<script src="~/lib/select2/select2.min.js"></script>
+
+	<script src="~/js/Marketing/pr.js"  asp-append-version="true"></script>
+
+
+
+	<script>
+		$("select").select2({
+			placeholder: "Выберите элемент",
+			allowClear: true
+		});
+	</script>
+
+}
+@section Styles {
+	<link href="~/lib/select2/select2.min.css" rel="stylesheet" />
+
+	<style>
+
+		.dropzone {
+			width: 13rem;
+			min-height: 3em !important;
+			height: 3em;
+			border-color: #fff;
+			padding: 0px;
+			pointer-events: none;
+		}
+
+		.upload-btn {
+			margin: 0 !important;
+			pointer-events: all /*!important*/;
+			text-align: center;
+			font-size: 13px;
+			text-decoration: none;
+			font-weight: 700;
+			padding: 3px 6px;
+			background: #eaeef1;
+			display: block;
+			width: 160px;
+			background-image: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,.1));
+			border-radius: 3px;
+			color: rgba(0,0,0,.6);
+			text-shadow: 0 1px 1px rgba(255,255,255,.7);
+			box-shadow: 0 0 0 1px rgba(0,0,0,.2), 0 1px 2px rgba(0,0,0,.2), inset 0 1px 2px rgba(255,255,255,.7);
+		}
+
+		.download-btn {
+			text-align: center;
+			font-size: 13px;
+			color: #fff;
+			text-decoration: none;
+			font-weight: 500;
+			padding: 3px 6px;
+			background: #20a8d8;
+			display: block;
+			width: 120px;
+			border-radius: 3px;
+			box-shadow: 0 0 0 1px rgba(0,0,0,.2), 0 1px 2px rgba(0,0,0,.2), inset 0 1px 2px rgba(255,255,255,.7);
+			cursor: pointer !important;
+		}
+	</style>
+
+}
+
+
+
+

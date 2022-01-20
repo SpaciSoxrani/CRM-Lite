@@ -1,0 +1,415 @@
+﻿
+@{
+    ViewData["Name"] = "Маркетинговые списки";
+}
+<script>
+
+    function Auto(e) {
+        $(e).autoNumeric('init', { aSep: ' ', aDec: ',' });
+    }
+
+    var True = true;
+    var False = false;
+    var isTopOrMarketing =  @(ViewBag.IsTopOrMarketing.ToString());
+
+</script>
+
+<div class="row">
+    <div class="col-xl-3 col-12 pt-2">
+        <table id="marketing-lists-table" class="table table-hover">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Id</th>
+                <th>Название маркетингового списка</th>
+                <th>Статус</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="alert alert-danger col-xl-9 col-12 pt-2 h-100" role="alert" style="display: none;">
+        Данный маркетинговый список закрыт для редактирования!
+    </div>
+    <div class="col-xl-9 col-12 pt-2 d-none" id="marketingList-contact-table-with-filters">
+        <div class="row justify-content-between">
+            <div class="col">
+                <button type="button" class="btn btn-primary rounded" onclick="clearFilters();"><span>Очистить все фильтры</span></button>
+            </div>
+            <div class="alert alert-success col" role="alert" style="display: none;">
+                Изменения сохранены успешно!
+            </div>
+            <div class="col-4">
+                <div class="input-group mb-3">
+                    <form class="w-100 d-flex" novalidate>
+                        <input type="text" id="marketing-list-name" class="form-control" placeholder="Название маркетингового списка" aria-label="Название маркетингового списка">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" style="display: none;" id="marketing-list-name-save-btn" type="button" onclick="createMarketingList(this);">
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row justify-content-around">
+
+                    <div class="form-group col-md-3">
+                        <label for="role">Роль</label>
+                        <br/>
+                        <select class="form-control" style="width: 100%; height: 2.5em;" id="role"></select>
+                    </div>
+
+                    <div class="form-group col-md-5">
+                        <label for="town">Город</label>
+                        <br/>
+                        <input id="town" name="town" style="width: 100%; height: 2.5em;" type="text" class="form-control"/>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="industry">Отрасль</label>
+                        <br/>
+                        <select class="form-control" style="width: 100%; height: 2.5em;" id="industry"></select>
+                    </div>
+                </div>
+                <div class="row justify-content-around">
+                    <div class="form-group col-md-3">
+                        <label for="gender">Пол</label>
+                        <br/>
+                        <select class="form-control" style="width: 100%; height: 2.5em;" id="gender"></select>
+                    </div>
+
+                    <div class="form-group col-md-5">
+                        <label for="contact-name">ФИО</label>
+                        <br/>
+                        <input id="contact-name" style="width: 100%; height: 2.5em;" type="text" class="form-control"/>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="organization">Организация</label>
+                        <br/>
+                        <select multiple="multiple" class="form-control" style="width: 100%; height: 2.5em;" id="organization"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <table id="contacts-table" class="table table-hover">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Id</th>
+                    <th>ФИО</th>
+                    <th>E-mail</th>
+                    <th>Организация</th>
+                    <th>Должность</th>
+                    <th>Ответственный менеджер</th>
+                    <th>Департамент</th>
+                    <th>Тип подарка</th>
+                    <th>Доставка</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="modal-new-marketing-list" class="modal">
+    <div class="modal-dialog animated">
+        <div class="modal-content">
+            <div class="d-flex justify-content-end">
+                <i class="fa fa-times fa-2x" aria-hidden="true" onclick="modalNewMarketingList.close();"></i>
+            </div>
+            <div class="d-flex justify-content-center mt-2">
+                <div class="input-group mb-3">
+                    <input type="text" id="marketing-list-new-name" class="form-control" placeholder="Название маркетингового списка" aria-label="Название маркетингового списка">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" onclick="createMarketingList(this);">Создать</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-add-contact-to-marketinglist" class="modal">
+    <div class="modal-dialog animated">
+        <div class="modal-content">
+            <div class="d-flex justify-content-center row mt-2">
+                <div class="form-group required col-md-12">
+                    <label for="present-type">Тип подарка</label>
+                    <br />
+                    <select class="form-control" style="width: 100%; height: 2.5em;" id="present-type"></select>
+                </div>
+                <div class="form-group row col-md-12 pt-2">
+                    <div class="col-2">
+                        <label for="need-to-deliver">
+                            Доставка
+                        </label>
+                    </div>
+                    <div class="col-2">
+                        <label class="switch switch-3d switch-primary">
+                            <input id="need-to-deliver"
+                                   type="checkbox" class="switch-input"/>
+                            <span class="switch-label"></span>
+                            <span class="switch-handle"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row col-md-12 no-gutters" id="delivery-block" style="display: none">
+                    <div class="form-group col-md-12">
+                        <input type="text" class="form-control" placeholder="Адрес" id="contact-delivery-address" aria-label="Адрес">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <input type="text" class="form-control" placeholder="Индекс" id="contact-delivery-index" aria-label="Индекс">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <input type="text" class="form-control" placeholder="Телефон" id="contact-delivery-phone" aria-label="Телефон">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <input type="text" class="form-control" placeholder="Контактное лицо" id="contact-delivery-name" aria-label="Контактное лицо">
+                    </div>
+                </div>
+                
+            </div>
+            <div class="d-flex justify-content-center pt-2">
+                <button class="btn btn-secondary mr-2" type="button" onclick="rejectAddingContact();">Отменить</button>
+                <button class="btn btn-primary" type="button" onclick="addContactToMarketingList(this);">Добавить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="contact-list">
+        <table id="marketing-lists-table" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Название маркетингового списка</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>*@
+
+
+@*<div id="validation-error" style="display: none" class="alert alert-danger alert-dismissable fade in">
+        <strong>Ошибка при сохранении!</strong>
+        Пожалуйста введите название и выберите контакты!
+    </div>
+    <form>
+        <div class="animated fadeIn">
+            <div class="card">
+                <div class="card-body generalInfo">
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label for="mailing-list-name">Название маркетингового списка</label>
+                            <br />
+                            <input id="mailing-list-name" style="width: 100%; height: 2.5em;" type="text" class="form-control" required />
+                        </div>
+                        <div class="col-md-2 offset-7">
+                            <br />
+                            <input id="show-marketing-lists" type="button" class="btn btn-primary" onclick="modalMarketingLists.open()" value="Все маркетинговые списки" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-1">
+                            <label for="gender">Пол</label>
+                            <br />
+                            <select class="form-control" style="width: 100%; height: 2.5em;" id="gender"></select>
+                        </div>
+
+                        <div class="form-group col-md-2">
+                            <label for="role">Роль</label>
+                            <br />
+                            <select class="form-control" style="width: 100%; height: 2.5em;" id="role"></select>
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="town">Город</label>
+                            <br />
+                            <input id="town" name="town" style="width: 100%; height: 2.5em;" type="text" class="form-control" />
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="industry">Отрасль</label>
+                            <br />
+                            <select class="form-control" style="width: 100%; height: 2.5em;" id="industry"></select>
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="organization">Организация</label>
+                            <br />
+                            <select multiple="multiple" class="form-control" style="width: 100%; height: 2.5em;" id="organization"></select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1">
+                            <br />
+                            <input id="create-contact-list" type="button" style="width: 100%" class="btn btn-primary" value="Найти" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i>
+                    </div>
+                    <div class="card-body">
+                        <table id="contacts-table" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Id</th>
+                                    <th>ФИО</th>
+                                    <th>E-mail</th>
+                                    <th>Организация</th>
+                                    <th>Должность</th>
+                                    <th>Прикреплённый сейл</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-md-4 offset-8 text-right">
+                            <br />
+                            <input id="send-marketing-list" type="button" class="btn btn-primary" value="Cохранить" />
+                            <input id="cancel-marketing-list" type="button" class="btn btn-primary" value="Отменить" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="modal-contact-list" class="modal">
+        <div class="modal-dialog animated">
+            <div class="modal-content">
+                <div class="contact-list">
+                    <table id="contact-list-table" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>ФИО</th>
+                                <th>Организация</th>
+                                <th>Прикреплённый сейл</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="escape">
+                    <button class="btn btn-classic" onclick="modalContactList.close();">Выйти</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-marketing-lists" class="modal">
+        <div class="modal-dialog animated">
+            <div class="modal-content">
+                <div class="contact-list">
+                    <table id="marketing-lists-table" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Название маркетингового списка</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="escape">
+                    <button class="btn btn-classic" onclick="modalMarketingLists.close();">Выйти</button>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+@section Styles {
+    <link href="~/lib/select2/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/lib/datatables/datatables.min.css" />
+    <link rel="stylesheet" href="~/lib/rmodal/animate.css" type="text/css" />
+    <link rel="stylesheet" href="~/lib/rmodal/rmodal.css" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@19.8.0/dist/css/suggestions.min.css" rel="stylesheet" />
+
+    <style>
+        .required-field-group-highlighted {
+            outline: 2px solid red;
+        }
+
+        .modal-dialog {
+            margin: 130px auto !important;
+            width: 500px;
+        }
+
+        .modal-content {
+            padding: 10px;
+        }
+
+        .selected {
+            background-color: white !important;
+            color: black !important;
+        }
+    </style>
+
+}
+
+
+@section Scripts {
+    <script src="~/lib/select2/select2.min.js"></script>
+    <script type="text/javascript" src="~/lib/rmodal/rmodal.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript" src="~/lib/datatables/datatables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@19.8.0/dist/js/jquery.suggestions.min.js"></script>
+    <script src="~/lib/autonumeric/autoNumeric-2.0-BETA.js"></script>
+    <script src="~/js/Marketing/MarketingList/marketingListTables.js" asp-append-version="true"></script>
+    <script src="~/js/Marketing/MarketingList/operationsWithMarketingLists.js" asp-append-version="true"></script>
+    <script src="~/js/Marketing/MarketingList/operationsWithContactsInMarketingLists.js" asp-append-version="true"></script>
+    <script src="~/js/Marketing/MarketingList/marketingListModals.js" asp-append-version="true"></script>
+    <script src="~/js/Marketing/MarketingList/filterFields.js" asp-append-version="true"></script>
+    <script src="~/js/Marketing/MarketingList/marketingListContactLoadAndFilter.js" asp-append-version="true"></script>
+    <script src="~/js/Marketing/MarketingList/marketingListSaveInfo.js" asp-append-version="true"></script>
+
+    <script>
+        var town;
+
+        $("#town").suggestions({
+            token: "3f21b0fab3cd3bb35b0925fd435d66fbc1879eef",
+            type: "ADDRESS",
+            /* Вызывается, когда пользователь выбирает одну из подсказок */
+            onSelect: function (suggestion) {
+                console.log(suggestion);
+                town = suggestion;
+
+                $("#town").val(town.data.city);
+            }
+        });
+
+        $("select").select2({
+            placeholder: "Выберите элемент",
+            allowClear: true
+        });
+    </script>
+
+
+
+
+
+}

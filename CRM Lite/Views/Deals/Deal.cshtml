@@ -1,0 +1,726 @@
+﻿@model CRM.UI.Models.DealViewModel
+@using CRM.UI.Utils.ViewUtils
+@{
+    ViewData["Name"] = Model?.Name;
+
+    if (Model == null)
+    {
+        ViewData["Name"] = "Создание сделки";
+    }
+
+    var stepNumber = DealViewFunctions.GetStepNumber(Model?.StepName);
+}
+
+    <form id="deal">
+
+        <input id="id" type="hidden" />
+        <input class="d-none" id="changed-date" type="date" />
+        <script>
+
+    function Auto(e) {
+        $(e).autoNumeric('init', { aSep: ' ', aDec: ',' });
+    }
+
+    function IsNullEmptyUndefined(value) {
+        return value === null || value === "" || value === undefined;
+    }
+
+    function enableElement() {
+        var org = $('#verification-step-organization').val();
+
+        $('#verification-step-contact').empty();
+        $('#verification-step-decision-maker').empty();
+        if (org != null) {
+
+            $('#verification-step-contact').removeAttr('disabled');
+            $('#verification-step-decision-maker').removeAttr('disabled');
+
+        } else {
+            $('#verification-step-contact').attr('disabled', 'disabled');
+            $('#verification-step-decision-maker').attr('disabled', 'disabled');
+        }
+    }
+
+    var True = true;
+    var False = false;
+    var isDvs = @(Model?.IsDvs ?? false);
+    var isFormalProcedure =
+        @(ViewBag.IsFormalSelectionProcedure == null ? true : ViewBag.IsFormalSelectionProcedure.ToString());
+
+        </script>
+        <div class="animated fadeIn">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div id="form-summary" class="col-md-12">
+                            <fieldset>
+                                <legend>Общая информация</legend>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">Название сделки</label>
+                                            <small title="Скопировать название" onclick="copyDealName();" class="copy-esg-value"> 📋 </small>
+                                            <input disabled type="text" class="form-control" id="name" placeholder="Название сделки">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="purchase-interval">Интервал времени покупки</label>
+                                        <br />
+                                        <select class="form-control" style="width:100%; height:2.5em;"
+                                                id="purchase-interval" disabled></select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="responsible-name">Ответственный</label>
+                                            <input disabled type="text" class="form-control" id="responsible-name" placeholder="Ответственный">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="step">Этап</label>
+                                            <input disabled
+                                                   class="form-control" id="step">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <label for="probability">Вероятность</label>
+                                            <input disabled class="form-control"
+                                                   id="probability" placeholder="Вероятность">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="estimated-budget">Предполагаемый бюджет</label>
+                                            <input disabled
+                                                   class="form-control" id="estimated-budget" placeholder="Предполагаемый бюджет">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="estimated-margin">Предполагаемая маржа</label>
+                                            <input disabled class="form-control"
+                                                   id="estimated-margin" placeholder="Предполагаемая маржа">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="organization">Организация</label>
+                                            <select disabled
+                                                    class="form-control" id="organization" placeholder="Организация"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="contact">Контакт</label>
+                                            <select disabled
+                                                    class="form-control" id="contact" placeholder="Контакт"></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="steps-card" class="card">
+                                <div class="card-header">
+                                    <strong>Основная информация</strong>
+                                    <div class="card-actions">
+                                        <a href="#" class="btn btn-minimize" data-toggle="collapse"
+                                           data-target="#steps-card-body"
+                                           aria-expanded="true"><i class="icon-arrow-up"></i></a>
+                                    </div>
+                                </div>
+                                <div id="steps-card-body" class="card-body collapse show">
+                                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link
+                                           @(DealViewFunctions.GetCssClassesIfStepIsCurrent("Верификация потребности", Model?.StepName, true))"
+                                               id="pills-verification-tab" data-toggle="pill"
+                                               href="#pills-verification" role="tab" onclick="isExpressButtonShown(1, @stepNumber)"
+                                               aria-controls="pills-verification" aria-selected="true">Верификация потребности</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link
+                                           @(DealViewFunctions.GetCssClassesIfStepIsCurrent("Разработка проекта технического решения", Model?.StepName, true))"
+                                               id="pills-development-tab" data-toggle="pill" onclick="isExpressButtonShown(2, @stepNumber)"
+                                               href="#pills-development" role="tab"
+                                               aria-controls="pills-development" aria-selected="true">
+                                                Разработка проекта технического решения
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link
+                                           @(DealViewFunctions.GetCssClassesIfStepIsCurrent("Согласование решения", Model?.StepName, true))" onclick="isExpressButtonShown(3, @stepNumber)"
+                                               id="pills-negotiating-tab" data-toggle="pill" href="#pills-negotiating" role="tab"
+                                               aria-controls="pills-negotiating" aria-selected="false">Согласование решения</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link
+                                           @(DealViewFunctions.GetCssClassesIfStepIsCurrent("Конкурсная процедура", Model?.StepName, true))" onclick="isExpressButtonShown(4, @stepNumber)"
+                                               id="pills-contest-tab" data-toggle="pill" href="#pills-contest" role="tab"
+                                               aria-controls="pills-contest" aria-selected="false">Конкурсная процедура</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link
+                                           @(DealViewFunctions.GetCssClassesIfStepIsCurrent("Подписание контракта", Model?.StepName, true))" onclick="isExpressButtonShown(5, @stepNumber)"
+                                               id="pills-contract-signed-tab" data-toggle="pill" href="#pills-contract-signed" role="tab"
+                                               aria-controls="pills-contract-signed" aria-selected="false">Подписание контракта</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link
+                                           @(DealViewFunctions.GetCssClassesIfStepIsCurrent("Работа по контракту", Model?.StepName, true))" onclick="isExpressButtonShown(6, @stepNumber)"
+                                               id="pills-contract-works-tab" data-toggle="pill" href="#pills-contract-works" role="tab"
+                                               aria-controls="pills-contract-works" aria-selected="false">Работа по контракту</a>
+                                        </li>
+                                        @if (ViewBag.HasAccessToAddUsers)
+                                        {
+                                            <li class="nav-item ml-auto">
+                                                <input id="giveAccessToDeal" onclick="accessModal.open(); initDealAccessListTable();" type="button" class="btn btn-warning rounded" value="Выдать доступ к сделке">
+                                            </li>
+                                        }
+                                    </ul>
+
+                                    <div class="tab-content" id="pills-tabContent">
+                                        <div class="tab-pane @(DealViewFunctions.GetCssClassesIfStepIsCurrent("Верификация потребности", Model?.StepName))"
+                                             id="pills-verification" role="tabpanel"
+                                             aria-labelledby="pills-verification-tab">
+
+                                            <partial name="~/Views/Deals/Steps/VerificationStep.cshtml" model="Model" />
+
+                                        </div>
+
+                                        <div class="tab-pane
+                                           @(DealViewFunctions.GetCssClassesIfStepIsCurrent("Разработка проекта технического решения", Model?.StepName))"
+                                             id="pills-development" role="tabpanel" aria-labelledby="pills-development-tab">
+
+                                            <partial name="~/Views/Deals/Steps/DevelopmentStep.cshtml" model="Model" />
+
+                                        </div>
+
+
+
+                                        <div class="tab-pane @(DealViewFunctions.GetCssClassesIfStepIsCurrent("Согласование решения", Model?.StepName))"
+                                             id="pills-negotiating"
+                                             role="tabpanel" aria-labelledby="pills-negotiating-tab">
+
+                                            <partial name="~/Views/Deals/Steps/NegotiatingStep.cshtml" model="Model" />
+
+                                        </div>
+
+                                        <div class="tab-pane @(DealViewFunctions.GetCssClassesIfStepIsCurrent("Конкурсная процедура", Model?.StepName))"
+                                             id="pills-contest" role="tabpanel" aria-labelledby="pills-contest-tab">
+
+                                            <partial name="~/Views/Deals/Steps/ContestStep.cshtml" model="Model" />
+
+                                        </div>
+
+                                        <div class="tab-pane
+                                           @(DealViewFunctions.GetCssClassesIfStepIsCurrent("Подписание контракта", Model?.StepName))"
+                                             id="pills-contract-signed" role="tabpanel"
+                                             aria-labelledby="pills-contract-signed-tab">
+
+                                            <partial name="~/Views/Deals/Steps/ContractSignedStep.cshtml" model="Model" />
+
+                                        </div>
+
+                                        <div class="tab-pane @(DealViewFunctions.GetCssClassesIfStepIsCurrent("Работа по контракту", Model?.StepName))"
+                                             id="pills-contract-works"
+                                             role="tabpanel" aria-labelledby="pills-contract-works-tab">
+
+                                            <partial name="~/Views/Deals/Steps/ContractWorksStep.cshtml" model="Model" />
+
+                                        </div>
+
+                                        <div class="tab-pane @(DealViewFunctions.GetCssClassesIfStepIsCurrent("Контракт закрыт", Model?.StepName))"
+                                             id="pills-contract-works"
+                                             role="tabpanel" aria-labelledby="pills-contract-works-tab">
+
+                                            <partial name="~/Views/Deals/Steps/ContractClosedStep.cshtml" model="Model" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    <div class="form-actions text-center">
+                        @if (Model?.StepName != "Контракт закрыт")
+                        {
+                            <input id="submit" onclick="saveDeal(false)" type="button" class="btn btn-primary" value="Сохранить">
+                            <input id="next-step" onclick="@(Model?.StepName == "Работа по контракту" ? "closeDealSuccessfully()" : "saveDeal(true)")" type="button" class="btn btn-primary"
+                                   value="@(Model?.StepName == "Работа по контракту" ? "Закрыть сделку" : "Следующий этап")">
+                            <input id="express" type="button" class="btn btn-primary"
+                                   value="@(Model?.StepName == "Согласование решения" ? "Конкурсная процедура отсутствует" : "Экспресс-сделка")">
+                        }
+                    </div>
+                </div>
+
+
+                <div id="modal-put-off-deal" class="modal">
+                    <div class="modal-dialog little-dialog">
+                        <div class="modal-content">
+                            <div class="row put-off-info" style="padding:15px">
+                                <div class="form-group col-md-3" style="padding-top: 0;">
+                                    <label for="put-off-date">Дата возобновления сделки</label>
+                                    <br />
+                                    <input class="put-off-date form-control" id="put-off-date" type="date" style="width:100%; height:2.5em;" required />
+                                </div>
+
+                                <div class="form-group col-md-9" style="padding-top: 0px;">
+                                    <label for="put-off-comment">Комментарий</label>
+                                    <br />
+                                    <textarea class="form-control" id="put-off-comment" required></textarea>
+                                </div>
+                            </div>
+                            <div class="escape">
+                                <input type="button" class="btn btn-classic" onclick="modalPutOff.close();" value="Отменить">
+                                <input id="submit" onclick="putOffDeal()" type="button" class="btn btn-primary" value="Отложить">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="modal-finish-deal" class="modal">
+                    <div class="modal-dialog little-dialog">
+                        <div class="modal-content finish-info">
+                            <div class="row">
+                                <div class="col-md-3" style="padding:15px">
+
+                                    <div class="form-group required" style="padding-top: 0;">
+                                        <label for="finish-status">Статус закрытия</label>
+                                        <br />
+                                        <select class="form-control" style="width: 100%; height: 2.5em;" id="finish-status" required></select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3" style="padding:15px">
+
+                                    <div class="form-group required" style="padding-top: 0;">
+                                        <label for="closure-date-fail">Дата закрытия</label>
+                                        <br />
+                                        <input type="date" value="@(Model?.ClosureDate == null ? DateTime.Now.ToString("yyyy-MM-dd") : Model?.ClosureDate.GetValueOrDefault().ToString("yyyy-MM-dd"))" 
+                                               class="form-control" style="width: 100%; height: 2.5em;" id="closure-date-fail" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6 finish-comment" style="display:none; padding:15px">
+
+                                    <div class="form-group required" style="padding-top: 0;">
+                                        <label for="finish-comment">Комментарий</label>
+                                        <br />
+                                        <textarea class="form-control" style="min-height:7rem;" id="finish-comment" required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="escape">
+                                <input type="button" class="btn btn-classic" onclick="modalFinishDeal.close();" value="Отменить">
+                                <input id="submit" onclick="@(ViewBag.IsDepHeader ? "acceptToCloseDeal();" : "closeDeal();")" type="button" class="btn btn-primary" value="Закрыть сделку">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="modal-close-deal" class="modal">
+                    <div class="modal-dialog little-dialog-25">
+                        <div class="modal-content">
+                            <div class="row">
+                                <div class="col-md-12" style="padding:15px">
+
+                                    <div class="form-group required" style="padding-top: 0;">
+                                        <label for="closure-date-success">Дата закрытия</label>
+                                        <br />
+                                        <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" style="width: 100%; height: 2.5em;" id="closure-date-success" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="escape">
+                                <input type="button" class="btn btn-classic" onclick="modalCloseDeal.close();" value="Отменить">
+                                <input id="submit" onclick="saveDeal(true)" type="button" class="btn btn-primary" value="Закрыть сделку">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="modal-preview-file" class="modal">
+                    <div class="modal-dialog w-100 h-100">
+                        <div class="modal-content h-100">
+                            <div class="escape mb-5">
+                                <input type="button" class="btn btn-classic" onclick="modalPreviewFile.close();" value="Закрыть">
+                            </div>
+                            <div id="preview-block">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <partial name="ProductRequestPartial" />
+                <partial name="ReplaceFilePartial" />
+
+                @if (ViewBag.HasAccessToAddUsers)
+                {
+
+                    <div id="modal-give-access" class="modal">
+                        <div class="modal-dialog little-dialog">
+                            <div class="modal-content">
+                                <div class="row">
+                                    <div class="form-group col-md-4" style="padding-top: 0px;">
+                                        <label for="users">Сотрудник</label>
+                                        <br />
+                                        <select class="form-control" style="width: 100%; height: 2.5em;" id="users" multiple="multiple"></select>
+                                    </div>
+                                    <div class="col-4 row" style="padding-top: 27px;">
+                                        <div class="col-5" style="text-align: right;">
+                                            Просмотр
+                                        </div>
+
+                                        <div class="col-2">
+                                            <label class="switch switch-3d switch-primary">
+                                                <input id="isAbleToEditDeal" required
+                                                       type="checkbox" class="switch-input" />
+                                                <span class="switch-label"></span>
+                                                <span class="switch-handle"></span>
+                                            </label>
+                                        </div>
+
+                                        <div class="col-5">
+                                            Редактирование
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2" style="padding-top: 20px;">
+                                        <input id="give-access" onclick="giveAccess();" type="button" class="btn btn-primary" value="Выдать доступ">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="additional-access-list w-100 mx-4">
+                                        <table id="additional-access-table" class="table table-hover" style="width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>ФИО</th>
+                                                    <th>Доступ</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="escape" style="padding-top: 30px;">
+                                    <input type="button" class="btn btn-classic" onclick="accessModal.close();" value="Закрыть">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+
+    </form>
+
+@section Scripts
+    {
+
+    <script src="~/lib/jquery-loading-overlay-1.6.0/loadingoverlay.js" type='text/javascript'></script>
+
+    <script type="text/javascript" src="~/lib/datepicker/js/datepicker.min.js"></script>
+
+    <script type="text/javascript" src="~/lib/jquery.maskedinput.min.js"></script>
+
+    <script type="text/javascript" src="~/js/Deal/dateActions.js" asp-append-version="true"></script>
+
+    <script src="~/lib/select2/select2.min.js"></script>
+
+    <script src="~/lib/dropzone/dropzone.js"></script>
+
+    <script src="~/js/Deal/putOffAndCloseDeal.js" asp-append-version="true"></script>
+
+    <script src="~/js/Deal/deal.js" asp-append-version="true"></script>
+
+    <script src="~/js/Deal/LoadDeal.js" asp-append-version="true"></script>
+
+    <script src="~/js/Deal/fillFields.js" asp-append-version="true"></script>
+
+    <script src="~/js/Deal/Files/actionsWithFiles.js" asp-append-version="true"></script>
+
+    <script src="~/js/Deal/productRequest.js" asp-append-version="true"></script>
+
+    <script src="~/js/Deal/servicesRequest.js" asp-append-version="true"></script>
+
+    <script src="~/js/Deal/Files/cloudLinkManager.js" asp-append-version="true"></script>
+
+    <script src="~/js/Deal/Files/filePreview.js" asp-append-version="true"></script>
+
+    <script src="~/js/Deal/Files/fileReplacing.js" asp-append-version="true"></script>
+
+    <script src="~/js/Deal/getDealValues.js" asp-append-version="true"></script>
+
+    @if (ViewBag.HasAccessToAddUsers)
+    {
+        <script src="~/js/Deal/giveAccessToDeal.js" asp-append-version="true"></script>
+        <script type="text/javascript" src="~/lib/datatables/datatables.min.js"></script>
+    }
+
+    <script src="https://unpkg.com/@@popperjs/core@2/dist/umd/popper.min.js"></script>
+
+    <script type="text/javascript" src="https://cloudofficeuk.hostco.ru//web-apps/apps/api/documents/api.js"></script>
+
+    <script src="~/lib/autonumeric/autoNumeric-2.0-BETA.js"></script>
+
+    <script type="text/javascript" src="https://unpkg.com/rmodal/dist/rmodal.js"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+}
+
+@section Styles {
+
+    <link href="~/lib/select2/select2.min.css" rel="stylesheet" />
+    <link href='~/lib/dropzone/dropzone.css' type='text/css' rel='stylesheet'>
+    <link rel="stylesheet" href="~/lib/rmodal/animate.css" type="text/css" />
+    <link rel="stylesheet" href="~/lib/rmodal/rmodal.css" type="text/css" />
+    <link rel="stylesheet" href="~/lib/datepicker/css/datepicker.min.css" type="text/css" />
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta charset="UTF-8" />
+
+
+    <style>
+
+        .dz-max-files-reached {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .dz-remove {
+            pointer-events: all;
+            cursor: pointer;
+        }
+
+        .current-step-link {
+            outline: 1px dashed #20a8d8;
+        }
+
+        .required-field-group-highlighted {
+            outline: 2px solid red;
+            padding: 2px;
+        }
+
+        .form-control:disabled, .form-control[readonly],
+        input[type="checkbox"]:disabled + span + span.switch-handle {
+            background-color: #eee !important;
+        }
+
+        #modal-put-off-deal {
+            position: fixed;
+        }
+
+        #modal-finish-deal {
+            position: fixed;
+        }
+
+        #modal-close-deal {
+            position: fixed;
+        }
+
+        .dz-clickable {
+            pointer-events: all;
+        }
+
+        [data-title] {
+            position: relative; /* Относительное позиционирование */
+        }
+
+            [data-title]::after {
+                content: attr(data-title);
+                position: absolute;
+                width: 300px;
+                left: 0;
+                top: 0;
+                background: #3989c9;
+                color: #fff;
+                padding: 0.5em;
+                box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+                pointer-events: none;
+                opacity: 1;
+                transition: 1s;
+            }
+
+            [data-title]:hover::after {
+                opacity: 1;
+                top: 2em;
+            }
+
+        .put-off-and-close {
+            display: none;
+        }
+
+        @@media (max-width: 1350px) {
+            .tasks .col-2 {
+                margin-right: 15px;
+            }
+        }
+
+        .escape {
+            text-align: center;
+        }
+
+        .active .put-off-and-close {
+            display: flex;
+        }
+
+        @@media (max-width: 1246px) {
+            .status {
+                margin-top: 10px;
+            }
+        }
+
+        #form-summary select {
+            width: 100%
+        }
+
+            #form-summary select::-ms-expand {
+                display: none;
+            }
+
+        #form-summary select {
+            -webkit-appearance: none;
+        }
+
+        .copy-esg-value {
+            cursor: pointer;
+        }
+
+        .dropzone {
+            width: 13rem;
+            min-height: 3em !important;
+            height: 3em;
+            border-color: #fff;
+            padding: 0px;
+            pointer-events: none;
+        }
+
+        .replace-files {
+            display: inline-block;
+            pointer-events: all;
+            border: 2px dashed #0087F7;
+            border-radius: 5px;
+            background: white;
+        }
+
+            .replace-files .dz-button {
+                background: none;
+                color: inherit;
+                border: none;
+                padding: 0;
+                font: inherit;
+                cursor: pointer;
+                outline: inherit;
+            }
+
+        .upload-btn {
+            margin: 0 !important;
+            pointer-events: all;
+            text-align: center;
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: 700;
+            padding: 3px 6px;
+            background: #eaeef1;
+            display: block;
+            width: 160px;
+            background-image: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,.1));
+            border-radius: 3px;
+            color: rgba(0,0,0,.6);
+            text-shadow: 0 1px 1px rgba(255,255,255,.7);
+            box-shadow: 0 0 0 1px rgba(0,0,0,.2), 0 1px 2px rgba(0,0,0,.2), inset 0 1px 2px rgba(255,255,255,.7);
+        }
+
+        .download-btn {
+            text-align: center;
+            font-size: 13px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 3px 6px;
+            background: #20a8d8;
+            display: block;
+            width: 120px;
+            border-radius: 3px;
+            box-shadow: 0 0 0 1px rgba(0,0,0,.2), 0 1px 2px rgba(0,0,0,.2), inset 0 1px 2px rgba(255,255,255,.7);
+            cursor: pointer !important;
+        }
+
+        @@-moz-document url-prefix() {
+            #form-summary select, #form-summary input {
+                border: 1px solid #CCC;
+                border-radius: 4px;
+                box-sizing: border-box;
+                position: relative;
+                overflow: hidden;
+            }
+
+                #form-summary select select {
+                    width: 110%;
+                    background-position: right 30px center !important;
+                    border: none !important;
+                }
+        }
+        /*//////*/
+
+
+        /*///////*/
+        .redColor {
+            color: red;
+        }
+
+        .modal-dialog {
+            max-width: 65%;
+            margin: 60px auto !important;
+        }
+
+        .little-dialog-25 {
+            max-width: 25%;
+            margin: 20% auto !important;
+        }
+
+        .little-dialog {
+            max-width: 65%;
+            margin: 20% auto !important;
+        }
+
+        .modal-content {
+            padding: 10px;
+        }
+
+        .survey-dialog {
+            max-width: 25%;
+        }
+        /* Modal Header */
+        .modal-header {
+            padding: 2px 16px;
+            background-color: #20a8d8;
+            color: white;
+        }
+
+        label {
+            justify-content: flex-start !important;
+        }
+    </style>
+}

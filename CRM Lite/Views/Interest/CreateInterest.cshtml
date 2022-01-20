@@ -1,0 +1,164 @@
+﻿
+@{
+    ViewData["Name"] = "CreateInterest";
+}
+
+<link href="~/lib/select2/select2.min.css" rel="stylesheet" />
+
+<style>
+    .required-field-group-highlighted {
+        outline: 2px solid red;
+    }
+
+    .redColor {
+        color: red;
+    }
+
+    .current-step-link {
+        outline: 1px dashed #20a8d8;
+    }
+</style>
+
+<form id="pr">
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-body additionalInfo">
+                <fieldset>
+                    <legend></legend>
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label for="interest">Источник интереса<span class="redColor">*</span></label>
+                            <br />
+                            <select class="form-control" style="width:100%; height:2.5em;" id="interest" required></select>
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="responsible">Ответственный<span class="redColor">*</span></label>
+                            <br />
+                            <select class="form-control" style="width:100%; height:2.5em;" id="responsible" required></select>
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="theme">Тема<span class="redColor">*</span></label>
+                            <br />
+                            <input id="theme" style="width:100%; height:2.5em;" type="text" class="form-control" required />
+                        </div>
+
+                    </div>
+                </fieldset>
+
+                <br />
+
+                <fieldset>
+                    <legend>Сведения</legend>
+
+                    <div class="row">
+                        <div class="form-group col">
+                            <label for="organization">Организация<span class="redColor">*</span></label>
+                            <br />
+                            <select class="form-control" style="width:100%; height:2.5em;" id="organization" onchange="FillOrganizationInfoAndLoadContact()"></select>
+                        </div>
+                        <div class="form-group col">
+                            <label for="web-site">Веб-сайт</label>
+                            <br />
+                            <input class="form-control" type="text" style="width:100%; height:2.5em;" id="web-site" disabled/>
+                        </div>
+                        <div class="form-group col">
+                            <label for="address">Адрес</label>
+                            <br />
+                            <input class="form-control" type="text" style="width:100%; height:2.5em;" id="address" disabled/>
+                        </div>
+                        <div class="form-group col">
+                            <label for="industry">Отрасль</label>
+                            <br />
+                            <select class="form-control" style="width:100%; height:2.5em;" id="industry" disabled></select>
+                        </div>
+                        <div class="form-group col">
+                            
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col">
+                            <label for="contact">Контакт<span class="redColor">*</span></label>
+                            <br />
+                            <select class="form-control" style="width:100%; height:2.5em;" id="contact" onchange="FillContactInfo()" disabled></select>
+                        </div>
+
+                        <div class="form-group col">
+                            <label for="job-title">Должность</label>
+                            <br />
+                            <input class="form-control" type="text" style="width:100%; height:2.5em;" id="job-title" disabled/>
+                        </div>
+
+                        <div class="form-group col">
+                            <label for="mail">e-mail<span class="redColor">*</span></label>
+                            <br />
+                            <input class="form-control" type="text" style="width:100%; height:2.5em;" id="mail" disabled/>
+                        </div>
+
+                        <div class="form-group col">
+                            <label for="work-phone">Раб. тел.</label>
+                            <br />
+                            <input class="form-control" type="text" style="width:100%; height:2.5em;" id="work-phone" disabled/>
+                        </div>
+
+                        <div class="form-group col">
+                            <label for="mobile-phone">Моб. тел.</label>
+                            <br />
+                            <input class="form-control" type="text" style="width:100%; height:2.5em;" id="mobile-phone" disabled/>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6" style="padding:15px;">
+                            <label for="description">Описание</label>
+                            <br />
+                            <textarea class="form-control" id="description"></textarea>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <br />
+
+                <fieldset>
+                    <legend>Маркетинговая информация</legend>
+                    <div class="row">
+
+                        <div class="form-group col-md-3">
+                            <label for="source-campaign">Исходная кампания</label>
+                            <br />
+                            <select class="form-control" style="width:100%; height:2.5em;" id="source-campaign"></select>
+                        </div>
+
+                        <div class="form-group col-md-2">
+                            <label for="is-marketing-materials">Отправка материалов</label>
+                            <br />
+                            <label class="switch switch-3d switch-primary">
+                                <input id="is-marketing-materials"
+                                       type="checkbox"
+                                       class="switch-input">
+                                <span class="switch-label"></span>
+                                <span class="switch-handle"></span>
+                            </label>
+                        </div>
+
+                        <div class="form-group ">
+                            <label for="calendar">Последняя дата кампании</label>
+                            <input type="date" class="form-control"
+                                   id="calendar" style="width:100%; height:2.5em;" />
+                        </div>
+
+                    </div>
+                </fieldset>
+
+            </div>
+
+            <div class="card-footer">
+                <div class="form-actions text-center">
+                    <input id="submit" onclick="SaveInterest()" type="button" class="btn btn-primary" value="Сохранить">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

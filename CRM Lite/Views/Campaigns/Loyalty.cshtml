@@ -1,0 +1,241 @@
+﻿
+@{
+	ViewData["Name"] = "Loyalty";
+}
+<script>
+
+    function Auto(e) {
+        $(e).autoNumeric('init', { aSep: ' ', aDec: ',' });
+    }
+
+</script>
+
+<form id="deal">
+	<div class="animated fadeIn">
+		<div class="card">
+			<div class="card-body">
+				<fieldset>
+					<legend>Поздравления</legend>
+
+					<div class="row">
+						<div class="form-group col-md-4">
+							<label for="name">Название кампании</label>
+							<br />
+							<input id="name" style="width:100%; height:2.5em;" type="text" class="form-control" />
+						</div>
+
+						<div class="form-group col-md-4">
+							<label for="organization">Организация</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="organization"></select>
+						</div>
+
+						<div class="form-group col-md-4">
+							<label for="contact">Контакт</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="contact"></select>
+						</div>
+
+					</div>
+
+					<div class="row">
+						<div class="form-group col-md-3">
+							<label for="mail">Почта</label>
+							<br />
+							<input id="mail" style="width:100%; height:2.5em;" type="text" class="form-control" />
+						</div>
+
+						<div class="form-group col-md-3">
+							<label for="contact-manager">Владелец контакта</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="contact-manager"></select>
+						</div>
+
+						<div class="form-group col-md-3">
+							<label for="congratulation-type">Вид поздравления</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="congratulation-type"></select>
+						</div>
+
+						<div class="form-group col-md-3">
+							<br />
+							<label class="switch switch-3d switch-primary">
+								<input id="is-congratulation"
+									   type="checkbox"
+									   class="switch-input">
+								<span class="switch-label"></span>
+								<span class="switch-handle"></span>
+							</label>
+							<label for="is-congratulation">Поздравлен</label>
+						</div>
+					</div>
+				</fieldset>
+
+				<br />
+
+				<fieldset>
+					<legend>Оценка Удовлетворенности</legend>
+					<div class="row">
+						<div class="form-group col-md-3">
+							<label for="organization">Организация</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="organization"></select>
+						</div>
+
+						<div class="form-group col-md-3">
+							<label for="contact">Контакт</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="contact"></select>
+						</div>
+
+						<div class="form-group col-md-3">
+							<label for="job-title">Должность</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="job-title"></select>
+						</div>
+
+						<div class="form-group col-md-3">
+							<label for="deal">Проект</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="deal"></select>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group col-md-3">
+							<label for="region">Регион</label>
+							<br />
+							<input id="region" style="width:100%; height:2.5em;" type="text" class="form-control" />
+						</div>
+
+						<div class="form-group col-md-3">
+							<label for="estimation-contact-manager">Владелец контакта</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="estimation-contact-manager"></select>
+						</div>
+
+						<div class="form-group col-md-3">
+							<label for="industry">Отрасль</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="industry"></select>
+						</div>
+
+						<div class="form-group col-md-3">
+							<label for="product-line">Продуктовая пренадлежность</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="product-line"></select>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group col-md-4">
+							<label for="recomendation-ready">Готовнсть рекомендовать</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="recomendation-ready"></select>
+						</div>
+
+						<div class="form-group col-md-4">
+							<label for="Interviewer">Интервьюер</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="Interviewer"></select>
+						</div>
+
+						<div class="form-group col-md-4">
+							<label for="estimation-date">
+								Дата оценки
+							</label>
+							<br />
+							<input id="estimation-date" type="date" style="width:100%; height:2.5em;"
+								   class="form-control" />
+						</div>
+					</div>
+
+
+					<div class="row">
+						<div class="form-group col-md-6" style="padding:15px;">
+							<label for="estimation-reason">Причина оценки</label>
+							<br />
+							<textarea class="form-control" id="estimation-reason"></textarea>
+						</div>
+
+						<div class="form-group col-md-6" style="padding:15px;">
+							<label for="comments">Комментарии</label>
+							<br />
+							<textarea class="form-control" id="comments"></textarea>
+						</div>
+					</div>
+				</fieldset>
+
+				<br />
+
+				<fieldset>
+					<legend>Дни рождения</legend>
+
+					<div class="row">
+
+						<div class="form-group col-md-3">
+							<label for="hb-organization">Организация</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="hb-organization"></select>
+						</div>
+
+						<div class="form-group col-md-3">
+							<label for="hb-contact">Контакт</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="hb-contact"></select>
+						</div>
+
+						<div class="form-group col-md-3">
+							<label for="contact-role">Роль контакта</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="contact-role"></select>
+						</div>
+
+						<div class="form-group col-md-3">
+							<label for="hb-contact-manager">Владелец контакта</label>
+							<br />
+							<select class="form-control" style="width:100%; height:2.5em;" id="hb-contact-manager"></select>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group col-md-12" style="padding:15px;">
+							<label for="gifts">Подарки</label>
+							<br />
+							<textarea class="form-control" id="gifts"></textarea>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+
+			<div class="card-footer">
+				<div class="form-actions text-center">
+					<input id="cancel" type="button" class="btn btn-secondary" value="Отменить">
+					<input id="submit" onclick="" type="button" class="btn btn-primary" value="Сохранить">
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+@section Scripts {
+	<script src="~/lib/select2/select2.min.js"></script>
+
+	<script src="~/js/Marketing/loyalty.js"  asp-append-version="true"></script>
+
+	<script>
+		$("select").select2({
+			placeholder: "Выберите элемент",
+			allowClear: true
+		});
+	</script>
+}
+
+@section Styles {
+	<link href="~/lib/select2/select2.min.css" rel="stylesheet" />
+}
+
+
+
+
+

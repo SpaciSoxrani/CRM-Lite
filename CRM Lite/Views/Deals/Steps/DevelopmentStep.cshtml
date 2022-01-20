@@ -1,0 +1,482 @@
+﻿@using CRM.UI.Utils.ViewUtils
+@model CRM.UI.Models.DealViewModel
+
+<div>
+    @* /////////////////////////// files /////////////////////////////////////////// *@
+    <div id="all-files-2" class="modal">
+        <div class="modal-dialog animated" style="max-width:60% !important">
+            <div class="modal-content" style="overflow: scroll;">
+
+                <div class="modal-header">
+                    <strong>Список файлов</strong>
+                </div>
+
+                <div class="row" id="files-content-2" style="padding:15px; align-items:center; justify-content: center;">
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-default" id="close" type="button" onclick="modal.close()">Закрыть</button>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+    @* ////////////////////////////////////////////////////////////////////// *@
+
+<div class="row">
+        <div class="col">
+            <div class="row col">
+                <div class="form-inline col-auto">
+
+                    <label for="development-probability">Вероятность  </label>
+
+
+                    <input type="text" value="20%" class="form-control"
+                           style="width:25%; height:2.5em;"
+                           id="development-probability" readonly />
+                </div>
+
+                <div class="form-inline col-auto">
+
+                    <label for="development-is-probable" style="white-space:nowrap; margin-right:1rem;">Вероятная сделка</label>
+
+                    <select class="form-control is-probable" id="development-is-probable" style="width:11em;"></select>
+
+
+                </div>
+
+                <div class="form-inline col-auto status">
+
+                    <label for="development-status" style="margin-right:1rem;">Статус сделки </label>
+
+
+                    <input type="text" value="Активная" class="form-control deal-status"
+                           id="development-status" readonly />
+                </div>
+
+                @if (Model != null && Model.IsClosed && Model.ClosureDate.HasValue)
+                {
+                    <div class="form-inline col-auto">
+                        <label style="margin-right: 1rem;">Дата закрытия сделки</label>
+                        <input readonly class="form-control" type="text" value="@(Model?.ClosureDate.GetValueOrDefault().ToShortDateString())" />
+                    </div>
+                }
+
+                <div class="form-inline row col-auto put-off-and-close @(Model?.StepName == "Разработка проекта технического решения" ? "" : "d-none")">
+                    <div class="col-auto">
+                        <input id="put-off-deal" type="button" onclick="modalPutOff.open()" class="btn btn-primary put-off-deal" value="Отложить сделку">
+                    </div>
+                    <div class="">
+                        <input onclick="acceptToCloseDeal()" type="button" style="display: none;" class="btn btn-primary accept-closing-deal" value="Согласовать закрытие сделки">
+                    </div>
+                    <div class="">
+                        <input id="submit" onclick="reopenDeal()" type="button" style="display: none;" class="btn btn-primary reopen-deal" value="Возобновить сделку">
+                    </div>
+                    <div class="col">
+                        <input type="button" onclick="modalFinishDeal.open();" class="btn btn-primary finish-deal" value="Потеря сделки">
+                    </div>
+                </div>
+            </div>
+            <fieldset class="tasks">
+                <legend>Задачи текущего этапа</legend>
+                <div class="row">
+                    <div class="col-md-6 col-xl-3">
+                        <div class="form-group row @(Model?.IsDvs == true ? "" : "required")">
+                            <div class="col-2">
+                                <label class="switch switch-3d switch-primary">
+                                    <input id="hint-development-step-define-work-group"
+                                           type="checkbox" class="switch-input" @(Model?.IsDvs == true ? "" : "required") />
+                                    <span class="switch-label"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                            <div class="col">
+                                <label for="hint-development-step-define-work-group">
+                                    Определить<wbr /> рабочую<wbr /> группу
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xl-3">
+                        <div class="form-group row @(Model != null && Model.IsDvs ? "" : "required")">
+                            <div class="col-2">
+                                <label class="switch switch-3d switch-primary">
+                                    <input id="hint-development-step-define-vendors"
+                                           type="checkbox" class="switch-input" @(Model?.IsDvs == true ? "" : "required") />
+                                    <span class="switch-label"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                            <div class="col">
+                                <label for="hint-development-step-define-vendors">
+                                    Выбрать<wbr /> вендора
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xl-3">
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <label class="switch switch-3d switch-primary">
+                                    <input id="hint-development-step-fill-in-production-claim"
+                                           type="checkbox" class="switch-input" />
+                                    <span class="switch-label"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                            <div class="col">
+                                <label for="hint-development-step-fill-in-production-claim">
+                                    Заполнить<wbr /> заявку<wbr /> на<wbr /> продуктирование
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xl-3">
+                        <div class="form-group row @(Model?.IsDvs == true ? "" : "required")">
+                            <div class="col-2">
+                                <label class="switch switch-3d switch-primary">
+                                    <input id="hint-development-step-register-project-with-vendor"
+                                           type="checkbox" class="switch-input" @(Model?.IsDvs == true ? "" : "required") />
+                                    <span class="switch-label"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                            <div class="col">
+                                <label title="Подключить ответственных лиц вендора"
+                                       for="hint-development-step-register-project-with-vendor">
+                                    Зарегистрировать<wbr /> проект<wbr /> у вендора
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-xl-3">
+                        <div class="form-group row form-inline">
+                            <div class="col-2">
+                                <label class="switch switch-3d switch-primary">
+                                    <input id="hint-development-step-work-through-defense-mechanisms"
+                                           type="checkbox" class="switch-input">
+                                    <span class="switch-label"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                            <div class="col">
+                                <label for="hint-development-step-work-through-defense-mechanisms">
+                                    Проработать<wbr /> механизм<wbr /> получения<wbr /> спец. цен
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xl-3">
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <label class="switch switch-3d switch-primary">
+                                    <input id="hint-development-step-get-special-prices-from-vendor"
+                                           type="checkbox" class="switch-input" />
+                                    <span class="switch-label"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                            <div class="col">
+                                <label for="hint-development-step-get-special-prices-from-vendor">
+                                    Запросить<wbr /> специальные<wbr /> цены<wbr /> у вендора
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6 col-xl-3">
+                        <div class="form-group row @(Model?.IsDvs == true ? "" : "required")">
+                            <div class="col-2">
+                                <label class="switch switch-3d switch-primary">
+                                    <input id="hint-development-step-work-through-tz"
+                                           type="checkbox" class="switch-input" @(Model?.IsDvs == true ? "" : "required") />
+                                    <span class="switch-label"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                            <div class="col">
+                                <label title="Подготовить ТЗ / Конкурсную документацию"
+                                       for="hint-development-step-work-through-tz">
+                                    Разработать<wbr /> ТКП/КП
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-xl-3">
+                        <div class="form-group row @(Model != null && Model.IsDvs ? "" : "required")">
+                            <div class="col-2">
+                                <label class="switch switch-3d switch-primary">
+                                    <input id="hint-development-step-layout-updating"
+                                           type="checkbox" class="switch-input" @(Model?.IsDvs == true ? "" : "required") />
+                                    <span class="switch-label"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                            <div class="col">
+                                <label for="hint-development-step-layout-updating">
+                                    Подготовить<wbr /> проект<wbr /> раскладки
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+            <div class="form-group required">
+                <label for="development-step-decision-maker">Лицо, принимающее решения</label>
+                <br />
+                <select id="development-step-decision-maker"
+                        class="form-control" style="width:100%; height:2.5em;" required onchange="$('#hint-negotiating-step-decision-maker').val(this.value).trigger('change')">
+                    @*<option value="" selected disabled>Не выбрано</option>*@
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="development-step-signing-date">
+                    Дата подписания контракта
+                </label>
+                <input id="development-step-signing-date" style="width:100%; height:2.5em;" type="text"
+                       class="datepicker-here form-control" placeholder="дд.мм.гггг" />
+            </div>
+
+            <div class="form-group">
+                <label for="development-step-closing-date">Дата закрытия контракта</label>
+                <input type="text" style="width:100%; height:2.5em;" class="datepicker-here form-control"
+                       id="development-step-closing-date" placeholder="дд.мм.гггг" />
+            </div>
+
+
+            <div class="form-group required">
+                <label for="development-step-estimated-budget">Предполагаемый бюджет</label>
+                <input onkeydown="Auto(this)" onclick="this.select();" required
+                       id="development-step-estimated-budget" style="width:100%; height:2.5em;"
+                       class="form-control" />
+            </div>
+
+            <div class="form-group required">
+                <label for="development-step-estimated-margin">Предполагаемая маржа</label>
+                <input onkeydown="Auto(this)" onclick="this.select();" style="width:100%; height:2.5em;" required
+                       id="development-step-estimated-margin" class="form-control" />
+            </div>
+
+        </div>
+
+
+
+
+
+        <div class="col">
+
+            <div class="form-group required">
+                <label for="development-step-sales-departments">Продающий Департамент</label>
+                <br />
+                <select style="width:100%; height:2.5em;" class="form-control"
+                        id="development-step-sales-departments" required></select>
+            </div>
+
+            <div class="form-group required">
+                <label for="development-step-industrial-departments">Производственный Департамент</label>
+                <br />
+                <select style="width:100%; height:2.5em;" class="form-control"
+                        id="development-step-industrial-departments" required></select>
+            </div>
+
+            <div class="form-group required">
+                <label for="development-step-sales-units">Продающий Отдел</label>
+                <br />
+                <select style="width:100%; height:2.5em;" class="form-control" required
+                        id="development-step-sales-units"></select>
+            </div>
+
+            <div class="form-group required">
+                <label for="development-step-product-units">Продуктовый Отдел</label>
+                <br />
+                <select multiple="multiple" style="width:100%; height:2.5em;" class="form-control" required
+                        id="development-step-product-units"></select>
+            </div>
+
+            <div class="form-group required">
+                <label for="development-step-industrial-units">Производственный Отдел</label>
+                <br />
+                <select multiple="multiple" style="width:100%; height:2.5em;" class="form-control" required
+                        id="development-step-industrial-units"></select>
+            </div>
+        </div>
+
+
+        <div class="col">
+
+            <div class="form-group required">
+                <label for="development-step-deal-type">Тип сделки</label>
+                <br />
+                <select class="form-control" required
+                        id="development-step-deal-type" style="width:100%; height:2.5em;">
+                    @*<option value="" selected disabled>Не выбрано</option>*@
+                </select>
+            </div>
+
+            <div class="form-group required">
+                <label for="development-step-product-line">Продуктовое направление</label>
+                <br />
+                <select multiple="multiple" class="form-control" required
+                        id="development-step-product-line" style="width:100%; height:2.5em;"></select>
+            </div>
+
+            <div id="request-development" style="display:@(DealViewFunctions.GetStepNumber(Model?.StepName) > 1 ? "block" : "none")">
+                <fieldset>
+                    <legend>Заявка на продуктирование</legend>
+
+                    <div class="row" style="justify-content:space-around;">
+                        <a href="#" id="showModal" onclick="getModal();" 
+                           style="display:@(DealViewFunctions.GetCssVisibleClassesForCurrentStep("Разработка проекта технического решения", Model?.StepName, Model?.DealStatusName))" 
+                           class="btn btn-primary">Создать заявку</a>
+                        <a class="btn view-product-deals-btn btn-primary @(Model?.ProductRequestIds.Count > 0 ? "" : "d-none")" href="/Deals/ProductRequests/@ViewBag.DealId" target="_blank">Просмотреть заявки</a>
+                    </div>
+                </fieldset>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <fieldset>
+                <legend>
+                    <input type="button" onclick="GetAllFiles(2)" class="btn btn-primary file-window" value="Прикрепленные файлы" />
+                </legend>
+                <div class="row" style="flex-wrap: wrap; justify-content: center;">
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="additional-files" class="small" title="Дополнительные файлы">
+                                Дополнительные файлы
+                                <a href="#"
+                                   class="popover-cloud"
+                                   data-toggle="popover"
+                                   data-placement="top" title="Ссылка на Hostco cloud"
+                                   data-trigger="click"
+                                   data-html="true"
+                                   data-popover-content="#additional-files-development-cloud-popover">
+                                    <i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i>
+                                </a>
+                            </label>
+                            <div id="additional-files-development-cloud-popover" class="cloud-link-block" style="display:none">
+                                <div class="row">
+                                    <div class="col-9">
+                                        <input onchange="checkСloudLink(this);" onclick="this.select();"
+                                               id="additional-files-development-cloud"
+                                               title="Тут должна быть ссылка на облако"
+                                               class="form-control" />
+                                    </div>
+                                    <div class="col-3 pl-0 d-flex align-middle">
+                                        <a class="btn btn-primary btn-sm btn-block h-100 save-cloud-link">
+                                            <i class="fa fa-check fa-2x text-white" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <form style="display: inline-block" class="dropzone additional-files d-inline">
+                                <input type="button" class="btn dz-default dz-message d-inline upload-btn" value="Загрузить файл" />
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group @(Model?.IsDvs == true ? "" : "required")">
+                            <label for="development-file-layout" class="small">Раскладка/Проект раскладки</label>
+                            <br />
+                            <form style="display: inline-block" class="dropzone" id="development-file-layout">
+                                <input type="button" class="btn dz-default dz-message upload-btn" value="Загрузить файл" @(Model?.IsDvs == true ? "" : "required")/>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3" style="flex-wrap: wrap">
+                        <div class="form-group">
+                            <label for="development-file-specification" class="small">
+                                Проект спецификации решения
+                            </label>
+                            <br />
+                            <form style="display: inline-block" class="dropzone" id="development-file-specification">
+                                <input type="button" class="btn dz-default dz-message upload-btn" value="Загрузить файл" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="flex-wrap: wrap; justify-content: center;">
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="development-file-tz" class="small">
+                                Техническое задание
+                                <a href="#"
+                                   class="popover-cloud"
+                                   data-toggle="popover"
+                                   data-placement="top" title="Ссылка на Hostco cloud"
+                                   data-trigger="click"
+                                   data-html="true"
+                                   data-popover-content="#development-file-tz-cloud-popover">
+                                    <i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i>
+                                </a>
+                            </label>
+                            <div id="development-file-tz-cloud-popover" class="cloud-link-block" style="display:none">
+                                <div class="row">
+                                    <div class="col-9">
+                                        <input onchange="checkСloudLink(this);" onclick="this.select();"
+                                               id="development-file-tz-cloud"
+                                               title="Тут должна быть ссылка на облако"
+                                               class="form-control" />
+                                    </div>
+                                    <div class="col-3 pl-0 d-flex align-middle">
+                                        <a class="btn btn-primary btn-sm btn-block h-100 save-cloud-link">
+                                            <i class="fa fa-check fa-2x text-white" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <form style="display: inline-block" class="dropzone" id="development-file-tz">
+                                <input type="button" class="btn dz-default dz-message upload-btn" value="Загрузить файл" />
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="development-file-kp" class="small">
+                                Утвержденное ТКП/КП
+                            </label>
+                            <br />
+                            <form style="display: inline-block" class="dropzone" id="development-file-kp">
+                                <input type="button" class="btn dz-default dz-message upload-btn" value="Загрузить файл" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+    </div>
+</div>

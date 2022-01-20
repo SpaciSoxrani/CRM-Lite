@@ -1,0 +1,121 @@
+﻿
+@{
+    ViewData["Title"] = "OldProductRequest";
+}
+
+@model CRM.UI.Models.OldProductRequestViewModel
+
+<div class="animated fadeIn">
+    <div id="request" class="card">
+        <div class="card-body">
+            <div class="col">
+                <div class="col">
+
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="adm-contact">Административный контакт заказчика</label>
+                            <br />
+                            <input disabled class="form-control" value="@Model.AdmContactName" style="width:100%; height:2.5em;" id="adm-contact"/>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="tech-contact">Технический контакт заказчика</label>
+                            <br />
+                            <input disabled class="form-control" value="@Model.TechContactName" style="width:100%; height:2.5em;" id="tech-contact" />
+                        </div>
+                    </div>
+
+                    <div id="vendors-div">
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label for="vendor">Вендоры</label>
+                                <br />
+                                <input disabled class="form-control" value="@Model.VendorNames" style="width:100%; height:2.5em;" id="vendor"/>
+                            </div>
+
+                            <div class="form-group col-md-8">
+                                <label for="responsible-product">Ответственные продакты</label>
+                                <br />
+                                <input disabled class="form-control" value="@Model.ProductManagerNames" style="width:100%; height:2.5em;" id="responsible-product"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="quests-div" style="margin-left: -15px;margin-right: -15px;">
+                        <div class="col">
+                            <div class="row" style="justify-content:space-between; padding:0 15px 0 15px;">
+                                <div>Задачи на продуктирование</div>
+                                <div id="first-date"></div>
+                            </div>
+                            <div class="input-group col-xs-7">
+                                <textarea disabled style="height:14rem;" class="form-control" id="quests">@Model.ProductAims</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Styles {
+    <link href="~/lib/select2/select2.min.css" rel="stylesheet" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta charset="UTF-8" />
+
+    <style>
+        /* todo: перенести стили в .scss */
+
+
+        .required-field-group-highlighted {
+            outline: 2px solid red;
+            padding: 2px;
+        }
+
+        .form-control:disabled, .form-control[readonly],
+        input[type="checkbox"]:disabled + span + span.switch-handle {
+            background-color: #eee !important;
+        }
+
+        #form-summary select {
+            width: 100%
+        }
+            /* This is to remove the arrow of select element in IE */
+            #form-summary select::-ms-expand {
+                display: none;
+            }
+
+        #form-summary select {
+            -webkit-appearance: none;
+            /*appearance: none;*/
+        }
+
+        #edit-request {
+            display: none;
+        }
+
+        .download-btn {
+            text-align: center;
+            font-size: 13px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 3px 6px;
+            background: #20a8d8;
+            display: block;
+            width: 120px;
+            border-radius: 3px;
+            box-shadow: 0 0 0 1px rgba(0,0,0,.2), 0 1px 2px rgba(0,0,0,.2), inset 0 1px 2px rgba(255,255,255,.7);
+            cursor: pointer !important;
+        }
+
+        .colorStar {
+            color: red;
+        }
+    </style>
+}
+
+

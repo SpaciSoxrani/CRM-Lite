@@ -1,0 +1,426 @@
+﻿@model CRM.UI.Models.DealViewModel
+
+<div>
+
+    @* /////////////////////////// surveys /////////////////////////////////////////// *@
+    <div id="survey" class="modal">
+        <div class="modal-dialog animated" style="max-width:25% !important">
+            <div class="modal-content" style="overflow: scroll;">
+
+                <div class="modal-header">
+                    <strong>Список опросников</strong>
+                </div>
+
+                <div class="row" id="surveys-content" style="padding:15px; align-items:center;">
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-default" id="close" type="button" onclick="modal.close()">Закрыть</button>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+    @* ////////////////////////////////////////////////////////////////////// *@
+
+    @* /////////////////////////// files /////////////////////////////////////////// *@
+    <div id="all-files-1" class="modal">
+        <div class="modal-dialog animated" style="max-width:70% !important">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <strong>Список файлов</strong>
+                </div>
+
+                <div class="row" id="files-content-1" style="padding:15px; align-items:center; justify-content: center;">
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-default" id="close" type="button" onclick="modal.close()">Закрыть</button>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+    @* ////////////////////////////////////////////////////////////////////// *@
+
+    <div class="row">
+        <div class="col">
+            <div class="row col">
+                <div class="form-inline col-2">
+
+                    <label for="verification-probability" style="margin-right:1rem;">Вероятность  </label>
+
+
+                    <input type="text" value="10%" class="form-control"
+                           style="width:25%;"
+                           id="verification-probability" readonly />
+                </div>
+
+                <div class="form-inline col-auto">
+                    <label for="created-date" style="margin-right:1rem;">Дата создания сделки</label>
+                    <input readonly class="form-control" id="created-date" type="text" value="@(Model?.CreatedDate.ToShortDateString())" />
+                </div>
+
+                <div class="form-inline col-auto">
+
+                    <label for="verification-is-probable" style="white-space:nowrap; margin-right:1rem;">Вероятная сделка</label>
+
+                    <select class="form-control is-probable" id="verification-is-probable" style="width:11em;">
+                    </select>
+
+                </div>
+
+                <div class="form-inline col-auto status">
+
+                    <label for="verification-status" style="margin-right:1rem;">Статус сделки </label>
+
+
+                    <input type="text" value="Активная" class="form-control deal-status"
+                           id="verification-status" readonly />
+                </div>
+
+                @if (Model != null && Model.IsClosed && Model.ClosureDate.HasValue)
+                {
+                    <div class="form-inline col-auto">
+                        <label style="margin-right: 1rem;">Дата закрытия сделки</label>
+                        <input readonly class="form-control" type="text" value="@(Model?.ClosureDate.GetValueOrDefault().ToShortDateString())" />
+                    </div>
+                }
+
+
+                <div class="form-inline row col-auto put-off-and-close @(Model?.StepName == "Верификация потребности" ? "" : "d-none")">
+                    <div class="col-auto">
+                        <input id="put-off-deal" type="button" onclick="modalPutOff.open()" class="btn btn-primary put-off-deal" value="Отложить сделку">
+                    </div>
+                    <div class="">
+                        <input onclick="acceptToCloseDeal()" type="button" style="display: none;" class="btn btn-primary accept-closing-deal" value="Согласовать закрытие сделки">
+                    </div>
+                    <div class="">
+                        <input id="submit" onclick="reopenDeal()" type="button" style="display: none;" class="btn btn-primary reopen-deal" value="Возобновить сделку">
+                    </div>
+                    <div class="col">
+                        <input type="button" onclick="modalFinishDeal.open();" class="btn btn-primary finish-deal" value="Потеря сделки">
+                    </div>
+                </div>
+            </div>
+
+            <fieldset>
+
+                <legend>Задачи текущего этапа</legend>
+
+                <div class="form-group required">
+                    <label for="hint-verification-step-clients-tasks-and-needs">Задачи и потребности клиента</label>
+                    <br />
+                    <textarea class="form-control" id="hint-verification-step-clients-tasks-and-needs" required></textarea>
+                </div>
+
+
+            </fieldset>
+        </div>
+    </div>
+
+    <div class="row">
+
+
+        <div class="col-md-4">
+
+            <div class="form-group required">
+                <label for="verification-step-name">Название</label>
+                <br />
+                <input class="form-control" style="width:100%; height:2.5em;"
+                       id="verification-step-name" required />
+            </div>
+
+            <div class="form-group required">
+                <label for="verification-step-responsible">Ответственный</label>
+                <br />
+                <select class="form-control" style="width:100%; height:2.5em;" id="verification-step-responsible"
+                        name="responsible" required disabled>
+                </select>
+            </div>
+
+            <div class="form-group required">
+                <label for="verification-step-organization">Организация</label>
+                <br />
+                <select class="form-control" style="width:100%; height:2.5em;" id="verification-step-organization"
+                        name="organization" required disabled>
+                    @*<option value="" selected disabled>Не выбрано</option>*@
+                </select>
+            </div>
+
+            <div class="form-group required">
+                <label for="verification-step-contact">Контакт</label>
+                <br />
+                <select class="form-control" style="width:100%; height:2.5em;" id="verification-step-contact"
+                        name="contact" disabled required>
+                    @*<option value="" selected disabled>Не выбрано</option>*@
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="verification-step-people-of-interest">Заинтересованные лица</label>
+                <br />
+                <select disabled style="width:100%; height:2.5em;" id="verification-step-people-of-interest" multiple="multiple"
+                        class="form-control">
+                    @*	<option value="" selected disabled>Не выбрано</option>*@
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="verification-step-decision-maker">Лицо, принимающее решения</label>
+                <br />
+                <select disabled
+                        id="verification-step-decision-maker"
+                        class="form-control" style="width:100%; height:2.5em;">
+                    @*<option value="" selected disabled>Не выбрано</option>*@
+                </select>
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="form-group required">
+                <label for="verification-step-sales-departments">Продающий Департамент</label>
+                <br />
+                <select style="width:100%; height:2.5em;" class="form-control"
+                        id="verification-step-sales-departments" required disabled onchange="$('#development-step-sales-departments').val(this.value).trigger('change')"></select>
+            </div>
+            
+            <div class="form-group required">
+                <label for="verification-step-industrial-departments">Производственный Департамент</label>
+                <br />
+                <select style="width:100%; height:2.5em;" class="form-control"
+                        id="verification-step-industrial-departments" required disabled onchange="$('#development-step-industrial-departments').val(this.value).trigger('change')"></select>
+            </div>
+
+            <div class="form-group required">
+                <label for="verification-step-sales-units">Продающий Отдел</label>
+                <br />
+                <select style="width:100%; height:2.5em;" class="form-control"
+                        id="verification-step-sales-units" required onchange="$('#development-step-sales-units').val(this.value).trigger('change')"></select>
+            </div>
+
+            <div class="form-group required">
+                <label for="verification-step-product-units">Продуктовый Отдел</label>
+                <br />
+                <select multiple="multiple"
+                        style="width:100%; height:2.5em;" class="form-control"
+                        id="verification-step-product-units" required onchange="$('#development-step-product-units').val($('#verification-step-product-units').val()).trigger('change')"></select>
+            </div>
+
+            <div class="form-group required">
+                <label for="verification-step-industrial-units">Производственный Отдел</label>
+                <br />
+                <select multiple="multiple"
+                        style="width:100%; height:2.5em;" class="form-control"
+                        id="verification-step-industrial-units" required onchange="$('#development-step-industrial-units').val($('#verification-step-industrial-units').val()).trigger('change')"></select>
+            </div>
+
+            <div class="form-group">
+                <label for="verification-step-competitors">Конкуренты</label>
+                <br />
+                <input class="form-control" style="width:100%; height:2.5em;"
+                       id="verification-step-competitors" />
+            </div>
+
+            <div class="row" style="align-items:center; justify-content:space-between;">
+                <div class="form-group col-md-7" style="margin-top:1rem;">
+
+                    <label class="switch switch-3d switch-primary">
+                        <input id="verification-is-recurring"
+                               type="checkbox"
+                               class="switch-input">
+                        <span class="switch-label"></span>
+                        <span class="switch-handle"></span>
+                    </label>
+                    <label for="verification-is-recurring">Повторная сделка</label>
+                </div>
+                <div style="justify-content:flex-end; padding-right:15px;">
+                    <a style="display:none; color:white;" id="verification-step-file-show-survey" class="btn btn-primary" onclick="GetSurveys()">Показать опросники</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="form-group required">
+                <label for="verification-step-deal-type">Тип сделки</label>
+                <br />
+                <select disabled class="form-control"
+                        id="verification-step-deal-type" style="width:100%; height:2.5em;" required 
+                        onchange="$('#development-step-deal-type').val(this.value).trigger('change')"></select>
+            </div>
+
+            <div class="form-group required">
+                <label for="verification-step-product-line">Продуктовое направление</label>
+                <br />
+                <select multiple="multiple" disabled class="form-control"
+                        id="verification-step-product-line" style="width:100%; height:2.5em;" required
+                        onchange="$('#development-step-product-line').val($('#verification-step-product-line').val()).trigger('change')"></select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="verification-step-signing-date">
+                    Дата подписания контракта
+                </label>
+                <br />
+                <input id="verification-step-signing-date" type="text" style="width:100%; height:2.5em;"
+                       class="datepicker-here form-control" placeholder="дд.мм.гггг"/>
+            </div>
+
+            <div class="form-group">
+                <label for="verification-step-estimated-budget">
+                    Предполагаемый бюджет
+                </label>
+                <br />
+                <input onkeydown="Auto(this)"
+                       onclick="this.select();"
+                       id="verification-step-estimated-budget" style="width:100%; height:2.5em;"
+                       class="form-control" onchange="$('#development-step-estimated-budget').val(this.value).trigger('change')"/>
+            </div>
+
+            <div class="form-group">
+                <label for="verification-step-contest-procedure">Конкурсная процедура</label>
+                <br />
+                <select class="form-control" style="width:100%; height:2.5em;" id="verification-step-contest-procedure" disabled></select>
+            </div>
+
+            <div class="form-group required">
+                <label for="verification-step-purchase-interval">Интервал времени покупки</label>
+                <br />
+                <select class="form-control" style="width:100%; height:2.5em;"
+                        id="verification-step-purchase-interval" required disabled></select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <fieldset>
+                <legend>
+                    <input type="button" onclick="GetAllFiles(1)" class="btn btn-primary file-window d-inline" value="Прикрепленные файлы" />
+                    
+                </legend>
+
+                <div class="row" style="justify-content: center;">
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="additional-files" class="small" title="Дополнительные файлы">
+                                Дополнительные файлы
+                                <a href="#"
+                                   class="popover-cloud"
+                                   data-toggle="popover"
+                                   data-placement="top" title="Ссылка на Hostco cloud"
+                                   data-trigger="click"
+                                   data-html="true"
+                                   data-popover-content="#additional-files-verification-cloud-popover">
+                                    <i class="fa fa-cloud-upload fa-lg" aria-hidden="true"></i>
+                                </a>
+                            </label>
+                            <div id="additional-files-verification-cloud-popover" class="cloud-link-block d-none">
+                                <div class="row">
+                                    <div class="col-9">
+                                        <input onchange="checkСloudLink(this);" onclick="this.select();"
+                                               id="additional-files-verification-cloud"
+                                               title="Тут должна быть ссылка на облако"
+                                               class="form-control" />
+                                    </div>
+                                    <div class="col-3 pl-0 d-flex align-middle">
+                                        <a class="btn btn-primary btn-sm btn-block h-100 save-cloud-link">
+                                            <i class="fa fa-check fa-2x text-white" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <form style="display: inline-block" class="dropzone additional-files d-inline"></form>
+                            <form style="display: inline-block" class="dropzone additional-files d-inline">
+                                <input type="button" class="btn dz-default dz-message d-inline upload-btn" value="Загрузить файл" />
+                            </form>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="verification-file-report" class="small" title="Описание проблематики клиента">
+                                Протокол по результатам встречи
+                            </label>
+                            <br />
+                            <form style="display: inline-block" class="dropzone" id="verification-file-report">
+                                <input type="button" class="btn dz-default dz-message upload-btn" value="Загрузить файл" />
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="verification-file-problems" class="small" title="Описание проблематики клиента">
+                                Профиль потребности
+                            </label>
+                            <br />
+                            <form style="display: inline-block" class="dropzone" id="verification-file-problems">
+                                <input type="button" class="btn dz-default dz-message upload-btn" value="Загрузить файл" />
+                            </form>
+                            @*<input id="verification-step-file-problems" type="file">*@
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="verification-file-survey" class="small">
+                                Опросник
+                            </label>
+                            <br />
+                            <form style="display: inline-block" class="dropzone" id="verification-file-survey">
+                                <input type="button" class="btn dz-default dz-message upload-btn" value="Загрузить файл" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        
+        <div class="col-md-12">
+
+
+            <div id="placeholder"></div>
+
+            <style>
+                .file_block {
+                    overflow: hidden;
+                    background: none repeat scroll 0 0 #FFFFFF;
+                    position: relative;
+                    transition: height 0.8s ease-out 0s;
+                    -moz-transition: height 0.8s ease-out 0s;
+                    -webkit-transition: height 0.8s ease-out 0s;
+                    -o-transition: height 0.8s ease-out 0s;
+                }
+
+                    .file_block iframe {
+                        border: 1px solid #000;
+                        padding: 10px;
+                    }
+
+                .show_docs span {
+                    cursor: pointer;
+                }
+            </style>
+        </div>
+    </div>
+
+</div>

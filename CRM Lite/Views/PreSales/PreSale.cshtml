@@ -1,0 +1,458 @@
+﻿@model CRM.Data.Dtos.PreSale.PreSaleGroupDto
+@{
+    ViewData["Name"] = Model.Name;
+}
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card" style=" height: 90vh; margin: 0;">
+                <div class="card-header">
+                    <strong>Фильтрация</strong>
+                    <div class="ml-2 d-inline">
+                        <button class="btn-primary rounded border-0" onclick="removePreSalesAllFilters()">
+                            Очистить всё
+                        </button>
+                        @if (ViewBag.IsTop || ViewBag.IsMarketing)
+                        {
+                            <button class="btn-success rounded border-0" onclick="table.buttons()[0].node.click();">
+                                Выгрузить список
+                            </button>
+                            <button class="btn-warning rounded border-0" onclick="downloadFile();">
+                                Выгрузить отчет
+                            </button>
+                        }
+                    </div>
+                    <div class="card-actions">
+                        <div class="btn-group" role="group">
+                            <div id="pre-sale-group-name" class="my-auto pr-2">
+
+                            </div>
+                            @if (ViewBag.IsTop || ViewBag.IsMarketing)
+                            {
+                                <div class="my-auto pr-2">
+                                    <button class="btn btn-warning rounded card-actions-btn-ignore" onclick="initPreSaleAccessListTable();">
+                                        Выдать доступ
+                                    </button>
+                                </div>
+                            }
+                            <a href="#" class="btn btn-minimize" data-toggle="collapse"
+                               data-target="#filter-body"
+                               aria-expanded="true"><i class="icon-arrow-down"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div id="filter-body" class="card-body collapse show mb-5" style="padding-bottom: 0;">
+
+                    <div class="row">
+
+                        <div class="col">
+                            <div class="form-group">
+                                <select id="region-filter" class="selectpicker show-tick show-menu-arrow" multiple
+                                        title="Регион"
+                                        data-width="90%"
+                                        data-actions-box="true"
+                                        data-size="5"
+                                        data-style="btn-primary"
+                                        data-deselect-all-text="Удалить все"
+                                        data-select-all-text="Выбрать все"
+                                        data-live-search="true">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                <select id="pre-sale-status-filter" class="selectpicker show-tick show-menu-arrow" multiple
+                                        title="Статус"
+                                        data-width="90%"
+                                        data-actions-box="true"
+                                        data-size="5"
+                                        data-style="btn-primary"
+                                        data-deselect-all-text="Удалить все"
+                                        data-select-all-text="Выбрать все"
+                                        data-live-search="true">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                <select id="responsible-user-filter" class="selectpicker show-tick show-menu-arrow" multiple
+                                        title="Ответственный сейл"
+                                        data-width="90%"
+                                        data-actions-box="true"
+                                        data-count-selected-text="{0} сотрудника выбрано"
+                                        data-size="5"
+                                        data-style="btn-primary"
+                                        data-deselect-all-text="Удалить все"
+                                        data-select-all-text="Выбрать все"
+                                        data-selected-text-format="count"
+                                        data-live-search="true">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="scrollStyle">
+                    <table id="pre-sales-table" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>id</th>
+                                <th></th>
+                                <th>Регион</th>
+                                <th>Часовой пояс</th>
+                                <th>Организация</th>
+                                <th>ФИО</th>
+                                <th>Должность</th>
+                                <th>Телефон</th>
+                                <th>E-mail</th>
+                                <th>Сайт</th>
+                                <th>Запрос отправлен</th>
+                                <th>Номер входящего</th>
+                                <th>Контакты исполнителя</th>
+                                <th>Комментарий</th>
+                                <th>Статус</th>
+                                <th>Ответственный сейл</th>
+                                <th>Дата назначения</th>
+                                <th>Результат</th>
+                                <th>Комментарий</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-new" class="modal">
+    <div class="modal-dialog animated">
+        <div class="modal-content">
+            <div class="d-flex justify-content-end">
+                <i class="fa fa-times fa-2x" aria-hidden="true" onclick="closeModalNew();"></i>
+            </div>
+            <div class="d-flex justify-content-center mt-2">
+                <div class="input-group mb-3">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="pre-sale-new-organization">Название организации</label>
+                                    <input type="text" class="form-control"
+                                           id="pre-sale-new-organization" placeholder="Название организации" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="pre-sale-new-region">Регион</label>
+                                    <select style="width: 100%"
+                                            class="form-control selectpicker" id="pre-sale-new-region"
+                                            data-style="btn-gray"
+                                            data-size="5"
+                                            data-live-search="true">
+                                        <option value="">Не выбрано</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-primary" type="button" onclick="savePreSale(this);">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.IsTop || ViewBag.IsMarketing)
+{
+    <div id="modal-access" class="modal">
+        <div class="modal-dialog little-dialog">
+            <div class="modal-content">
+                <div class="row">
+                    <div class="form-group col-md-4" style="padding-top: 0px;">
+                        <label for="users">Сотрудник</label>
+                        <br />
+                        <select class="form-control" style="width: 100%; height: 2.5em;" id="users" multiple="multiple"></select>
+                    </div>
+                    <div class="col-4 row" style="padding-top: 27px;">
+                        <div class="col-5" style="text-align: right;">
+                            Просмотр
+                        </div>
+
+                        <div class="col-2">
+                            <label class="switch switch-3d switch-primary">
+                                <input id="isAbleToEditDeal" required
+                                       type="checkbox" class="switch-input" />
+                                <span class="switch-label"></span>
+                                <span class="switch-handle"></span>
+                            </label>
+                        </div>
+
+                        <div class="col-5">
+                            Редактирование
+                        </div>
+                    </div>
+                    <div class="col" style="padding-top: 20px; padding-right: 1.5rem;">
+                        <input id="give-access" style=" display: block; margin: 0 auto; margin-right: 0;" onclick="giveAccess();" type="button" class="btn btn-primary" value="Выдать доступ">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="additional-access-list w-100 mx-4">
+                        <table id="additional-access-table" class="table table-hover" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>ФИО</th>
+                                    <th>Доступ</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="escape" style="padding-top: 30px;">
+                    <input type="button" class="btn btn-classic" onclick="closeModalAccess();" value="Закрыть">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.IsCanEdit)
+{
+    <i class="fa fa-plus fa-3x text-blue position-fixed" id="add-new-pre-sale" aria-hidden="true" onclick="createPreSale();"></i>
+}
+
+@section Styles {
+    <link href="~/lib/datepicker/css/datepicker.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="~/lib/datatables/datatables.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.17/dist/css/bootstrap-select.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@19.8.0/dist/css/suggestions.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css" />
+    <link rel="stylesheet" href="~/lib/rmodal/animate.css" type="text/css" />
+    <link rel="stylesheet" href="~/lib/rmodal/rmodal.css" type="text/css" />
+    <link href="~/lib/select2/select2.min.css" rel="stylesheet" />
+
+    <style>
+        #add-new-pre-sale {
+            bottom: 5%;
+            right: 3%;
+            background-image: -webkit-linear-gradient(top, #f4f1ee, #fff);
+            background-image: linear-gradient(top, #f4f1ee, #fff);
+            border-radius: 50%;
+            box-shadow: 0px 8px 10px 0px rgb(0 0 0 / 30%), inset 0px 4px 1px 1px white, inset 0px -3px 1px 1px rgb(204 198 197 / 50%);
+            float: left;
+            height: 70px;
+            position: relative;
+            width: 70px;
+            -webkit-transition: all .1s linear;
+            transition: all .1s linear;
+            text-align: center;
+        }
+
+            #add-new-pre-sale:before {
+                vertical-align: -35%;
+            }
+
+            #add-new-pre-sale:hover {
+                background-image: -webkit-linear-gradient(top, #fff, #f4f1ee);
+                background-image: linear-gradient(top, #fff, #f4f1ee);
+                color: #0088cc;
+            }
+
+        #modal-access .modal-dialog {
+            max-width: 65%;
+            margin: 60px auto !important;
+        }
+
+        #modal-access .modal-content {
+            padding: 10px;
+        }
+
+        #modal-access .modal-header {
+            padding: 2px 16px;
+            background-color: #20a8d8;
+            color: white;
+        }
+
+        .card-actions-btn-ignore {
+            width: fit-content !important;
+            color: #f5f5f5 !important;
+            background-color: #ff6a00 !important;
+            border-color: #ff6a00 !important;
+            padding-inline: 7px !important;
+        }
+
+        .filter-option-inner-inner {
+            display: block;
+            max-width: 200px !important;
+            text-overflow: ellipsis;
+        }
+
+        .checked-filter {
+            background-color: #ff6a00 !important;
+        }
+
+        .modal-content {
+            padding: 10px;
+        }
+
+        .modal-dialog {
+            margin: 130px auto !important;
+            width: 500px;
+        }
+
+        .justify-content-end {
+            cursor: pointer;
+        }
+
+        .table-select-field {
+            min-height: 2rem;
+            min-width: 8rem;
+        }
+
+        .table-textarea-field {
+            white-space: pre-wrap;
+            min-width: 8rem;
+            max-width: 20rem;
+        }
+
+        .comments-field {
+            white-space: pre-wrap;
+            overflow-y: scroll;
+            max-height: 5rem;
+            min-width: 10rem;
+            max-width: 12rem;
+        }
+
+        .field-is-invalid {
+            border: 1px solid #ff0000;
+            border-radius: 0;
+        }
+
+        textarea {
+            resize: both;
+        }
+
+        #pre-sales-table_filter {
+            text-align: left !important;
+            padding-left: 10px;
+        }
+
+        #pre-sales-table_info {
+            text-align: right !important;
+        }
+
+        .status-in-work {
+            color: black;
+            padding: 5px !important;
+        }
+
+        .status-not-interested {
+            background: #E1E1E1;
+            color: black;
+            padding: 5px !important;
+        }
+
+        .status-call {
+            color: black;
+            padding: 5px !important;
+        }
+
+        .status-given-to-sale {
+            background: #fff2cc;
+            color: black;
+            padding: 5px !important;
+        }
+
+        .result-refused {
+            background: #EFEFEF;
+            color: black;
+            padding: 5px !important;
+        }
+
+        #pre-sale-group-name {
+            font-weight: bold;
+            font-style: italic;
+            color: #20a8d8;
+        }
+
+        .btn-primary {
+            color: white !important;
+        }
+
+        .bootstrap-select .dropdown-toggle:focus {
+            outline: 0px none #fff !important;
+        }
+
+        .btn-gray {
+            color: #3e515b !important;
+            background-color: #fff;
+            border: 1px solid #c2cfd6;
+        }
+
+        #pre-sales-table tr {
+            font-size: 9.5pt;
+        }
+
+        .scrollStyle {
+            height: 100vh;
+            overflow-x: auto;
+            overflow-y: auto;
+        }
+    </style>
+}
+
+@section Scripts {
+
+    <script>
+        var IsTop =  @(ViewBag.IsTop.ToString().ToLower());
+        var isMarketing = @(ViewBag.IsMarketing.ToString().ToLower());
+        var IsCanRead =  @(ViewBag.IsCanRead.ToString().ToLower());
+        var IsCanEdit =  @(ViewBag.IsCanEdit.ToString().ToLower());
+        var groupName = "@Html.Raw(Model.Name)";
+    </script>
+
+    <script src="~/lib/autonumeric/autoNumeric-2.0-BETA.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    <script type="text/javascript" src="~/lib/datepicker/js/datepicker.min.js"></script>
+    <script type="text/javascript" src="~/lib/datatables/datatables.min.js"></script>
+    <script type="text/javascript" src="~/lib/rmodal/rmodal.js"></script>
+    <script type="text/javascript" src="~/lib/moment-with-locales/moment-with-locales.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.11.3/sorting/datetime-moment.js"></script>
+    <script src="~/lib/select2/select2.min.js"></script>
+
+    <script src="https://unpkg.com/@@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.17/dist/js/bootstrap-select.min.js"></script>
+
+    <script type="text/javascript" src="~/js/dataTableFields.js" asp-append-version="true"></script>
+
+    <script type="text/javascript" src="~/js/PreSale/Filter/filterItem.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/PreSale/Filter/Initialize/events.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/PreSale/Filter/Initialize/filterFunctions.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/PreSale/Filter/Initialize/filters.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/PreSale/Filter/Initialize/startedItems.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/PreSale/Filter/mapToGetElementFromKey.js" asp-append-version="true"></script>
+
+    <script type="text/javascript" src="~/js/PreSale/PreSaleList/preSaleList.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/PreSale/PreSaleList/preSale.js" asp-append-version="true"></script>
+
+    <script type="text/javascript" src="~/js/PreSale/PreSaleList/preSaleAccess.js" asp-append-version="true"></script>
+
+    <script type="text/javascript" src="~/js/PreSale/modals.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/PreSale/popUpWindows.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/PreSale/checkRequiredFields.js" asp-append-version="true"></script>
+
+}

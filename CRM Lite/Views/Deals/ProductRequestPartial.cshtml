@@ -1,0 +1,103 @@
+﻿@{
+    ViewData["Name"] = "ProductRequestPartial";
+}
+
+<div id="productRequestModal" class="modal">
+    <div class="modal-dialog animated">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <strong>Заявка на продуктирование</strong>
+            </div>
+
+            <div class="modal-body row" style="justify-content:flex-end; padding-bottom: 0;">
+                <p id="model-step-date" style="padding-right: 15px;"> </p>
+            </div>
+
+
+
+            <div class="row" style="padding:15px">
+                <div class="modal-body col-md-6" style="padding-top: 0;">
+                    <label for="model-step-adm-contact">Административный контакт заказчика<span class="redColor">*</span></label>
+                    <br />
+                    <select class="form-control" style="width:100%; height:2.5em;" id="model-step-adm-contact"></select>
+                </div>
+
+                <div class="modal-body col-md-6" style="padding-top: 0;">
+                    <label for="model-step-tech-contact">Технический контакт заказчика<span class="redColor">*</span></label>
+                    <br />
+                    <select class="form-control" style="width:100%; height:2.5em;" id="model-step-tech-contact"></select>
+                </div>
+            </div>
+
+            <div id="all-vendors">
+                <div class="row" style="padding:15px">
+                    <div class="form-group col-md-4" style="padding-top: 0;">
+                        <label for="model-step-vendor">Вендор</label>
+                        <br />
+                        <select class="form-control" onchange="fillResponsiblePeoples('');" style="width:100%; height:2.5em;" id="model-step-vendor"></select>
+                    </div>
+
+                    <div class="form-group col-md-4" style="padding-top: 0;">
+                        <label for="model-step-responsible-product">Ответственный продакт<span class="redColor">*</span></label>
+                        <br />
+                        <select class="form-control" style="width:100%; height:2.5em;" id="model-step-responsible-product"></select>
+                    </div>
+
+                    <div class="form-group col-md-4" style="padding-top: 0;">
+                        <label for="model-step-another-responsible">Добавить участников</label>
+                        <br />
+                        <select class="form-control" style="width:100%; height:2.5em;" id="model-step-another-responsible" multiple="multiple"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding-left:15px;">
+                <a onclick="AddVendor()" class="btn download-btn" id="add-vendor-button" style="width: fit-content; color: white;">+</a>
+            </div>
+
+            <div class="modal-body ">
+                <div class="form-group">
+                    <label for="model-step-quests" class="control-label col-xs-4">Задачи на продуктирование<span class="redColor">*</span></label>
+                    <div class="input-group col-xs-7">
+                        <textarea class="form-control" style="min-height:13rem;" id="model-step-quests"></textarea>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group ">
+                    <label class="switch switch-3d switch-primary">
+                        <input id="model-step-repeat"
+                               type="checkbox" class="switch-input" />
+                        <span class="switch-label"></span>
+                        <span class="switch-handle"></span>
+                    </label>
+                    <label class="form-check-inline"
+                           for="model-step-repeat">
+                        Повторное обращение
+                    </label>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+
+                <div class="row" style="justify-content:center">
+                    <label id="error" style="visibility:hidden;"><span class="redColor">Заполните необходимые поля</span></label>
+                </div>
+
+                <button class="btn btn-default" id="close" type="button" onclick="modal.close()">Отменить</button>
+                <button class="btn btn-primary" type="button" onclick="saveRequest()">Сохранить</button>
+                <button class="btn download-btn" style="background:#ff6a00;" type="button" onclick="saveRequest(true)">Старт заявки</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/lib/select2/select2.min.js"></script>
+}

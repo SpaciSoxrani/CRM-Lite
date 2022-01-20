@@ -1,0 +1,349 @@
+﻿
+@{
+    ViewData["Name"] = "Список сделок";
+}
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Фильтрация</strong>
+                    <div class="ml-2 d-inline">
+                        <button class="btn-primary rounded border-0" onclick="removeAllFilters();">
+                            Очистить всё
+                        </button>
+                    </div>
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-minimize" data-toggle="collapse"
+                           data-target="#filter-body"
+                           aria-expanded="true"><i class="icon-arrow-down"></i></a>
+                    </div>
+                </div>
+                <div id="filter-body" class="card-body collapse show mb-5" style="padding-bottom: 0;">
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <select id="status-filter" class="selectpicker show-tick show-menu-arrow" multiple
+                                        title="Cтатус сделки"
+                                        data-width="90%"
+                                        data-actions-box="true"
+                                        data-count-selected-text="{0} статусов выбрано"
+                                        data-size="4"
+                                        data-style="btn-primary"
+                                        data-deselect-all-text="Удалить все"
+                                        data-select-all-text="Выбрать все"
+                                        data-selected-text-format="count"
+                                        data-live-search="true">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <button class="btn-primary tippy-button" id="expected-margin-button">
+                                Предполагаемая маржа
+                            </button>
+                            <div id="expected-margin-block" class="d-none tippy-block">
+                                <button type="button" class="btn btn-primary d-block mb-2" onclick="deleteMarginFields('expected');">Удалить всё</button>
+                                <label title="От"
+                                       for="expected-margin-from">От</label>
+                                <input onkeydown="Auto(this)" required onclick="this.select();"
+                                       id="expected-margin-from"
+                                       class="form-control"/>
+
+                                <label title="До"
+                                       for="expected-margin-to">До</label>
+                                <input onkeydown="Auto(this)" required onclick="this.select();"
+                                       id="expected-margin-to"
+                                       class="form-control"/>
+                            </div>
+                        </div>
+
+                        @if (ViewBag.IsTop)
+                        {
+                            <div class="col">
+                                <button class="btn-primary tippy-button" id="department-button">
+                                    Департамент
+                                </button>
+                                <div class="form-group d-none tippy-block" id="department-block">
+                                    <select id="department-sales-filter" class="selectpicker show-tick show-menu-arrow" multiple
+                                            title="Продающий"
+                                            data-width="90%"
+                                            data-actions-box="true"
+                                            data-count-selected-text="{0} деп. выбрано"
+                                            data-size="5"
+                                            data-style="btn-primary"
+                                            data-deselect-all-text="Удалить все"
+                                            data-select-all-text="Выбрать все"
+                                            data-selected-text-format="count"
+                                            data-live-search="true">
+                                    </select>
+                                    <select id="department-industrial-filter" class="selectpicker show-tick show-menu-arrow mt-3" multiple
+                                            title="Производственный"
+                                            data-width="90%"
+                                            data-actions-box="true"
+                                            data-count-selected-text="{0} деп. выбрано"
+                                            data-size="5"
+                                            data-style="btn-primary"
+                                            data-deselect-all-text="Удалить все"
+                                            data-select-all-text="Выбрать все"
+                                            data-selected-text-format="count"
+                                            data-live-search="true">
+                                    </select>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="col">
+                            <div class="form-group">
+                                <input type="text" data-range="true" data-multiple-dates-separator=" - "
+                                       id="contract-date"
+                                       class="datepicker-here btn-primary"
+                                       placeholder="Дата подписания контракта" />
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                <select id="contact-filter" class="selectpicker show-tick show-menu-arrow"
+                                        title="Контакт"
+                                        data-width="90%"
+                                        multiple data-max-options="1"
+                                        data-size="5"
+                                        data-style="btn-primary"
+                                        data-live-search="true">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                <select id="responsible-product-filter" class="selectpicker show-tick show-menu-arrow"
+                                        title="Продакт"
+                                        data-width="90%"
+                                        multiple data-max-options="1"
+                                        data-size="5"
+                                        data-style="btn-primary"
+                                        data-live-search="true">
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col">
+                            <div class="form-group">
+                                <select id="step-filter" class="selectpicker show-tick show-menu-arrow" multiple
+                                        title="Этап сделки"
+                                        data-width="90%"
+                                        data-count-selected-text="{0} статуса выбрано"
+                                        data-actions-box="true"
+                                        data-size="5"
+                                        data-style="btn-primary"
+                                        data-deselect-all-text="Удалить все"
+                                        data-select-all-text="Выбрать все"
+                                        data-selected-text-format="count"
+                                        data-live-search="true">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <button class="btn-primary tippy-button" id="expert-margin-button">
+                                Экспертная маржа
+                            </button>
+                            <div id="expert-margin-block" class="d-none tippy-block">
+                                <button type="button" class="btn btn-primary d-block mb-2" onclick="deleteMarginFields('expert');">Удалить всё</button>
+                                <label title="От"
+                                       for="expert-margin-from">От</label>
+                                <input onkeydown="Auto(this)" required onclick="this.select();"
+                                       id="expert-margin-from"
+                                       class="form-control" />
+
+                                <label title="До"
+                                       for="expert-margin-to">До</label>
+                                <input onkeydown="Auto(this)" required onclick="this.select();"
+                                       id="expert-margin-to"
+                                       class="form-control" />
+                            </div>
+                        </div>
+
+                        @if (ViewBag.IsTop)
+                        {
+                            <div class="col">
+                                <div class="form-group">
+                                    <select id="sales-office-filter" class="selectpicker show-tick show-menu-arrow" multiple
+                                            title="Офис продаж"
+                                            data-width="90%"
+                                            data-actions-box="true"
+                                            data-count-selected-text="{0} офисов выбрано"
+                                            data-size="5"
+                                            data-style="btn-primary"
+                                            data-deselect-all-text="Удалить все"
+                                            data-select-all-text="Выбрать все"
+                                            data-selected-text-format="count"
+                                            data-live-search="true">
+                                    </select>
+                                </div>
+                            </div>
+                        }
+
+
+                        <div class="col">
+                            @if (ViewBag.IsTop || ViewBag.IsDepHeader)
+                            {
+                                <div class="form-group">
+                                    <select id="sale-filter" class="selectpicker show-tick show-menu-arrow" multiple
+                                            title="Сейл"
+                                            data-width="90%"
+                                            data-actions-box="true"
+                                            data-count-selected-text="{0} сотрудника выбрано"
+                                            data-size="5"
+                                            data-style="btn-primary"
+                                            data-deselect-all-text="Удалить все"
+                                            data-select-all-text="Выбрать все"
+                                            data-selected-text-format="count"
+                                            data-live-search="true">
+                                    </select>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                <select id="organization-filter" class="selectpicker show-tick show-menu-arrow" multiple
+                                        title="Организация"
+                                        data-width="90%"
+                                        data-actions-box="true"
+                                        data-count-selected-text="{0} организации выбрано"
+                                        data-size="5"
+                                        data-style="btn-primary"
+                                        data-deselect-all-text="Удалить все"
+                                        data-select-all-text="Выбрать все"
+                                        data-selected-text-format="count"
+                                        data-live-search="true">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                <select id="responsible-mp-filter" class="selectpicker show-tick show-menu-arrow"
+                                        title="МП"
+                                        data-width="90%"
+                                        multiple data-max-options="1"
+                                        data-size="5"
+                                        data-style="btn-primary"
+                                        data-live-search="true">
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <table id="deals-table" class="table table-hover w-100">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>Название</th>
+                            <th>Статус</th>
+                            <th>Ответственный</th>
+                            <th>Этап сделки</th>
+                            <th>Предполагаемый бюджет</th>
+                            <th>Предполагаемая маржа</th>
+                            <th>Дата подписания</th>
+                            <th></th>
+                            <th>Полное имя организации</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Styles {
+    <link href="~/lib/datepicker/css/datepicker.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="~/lib/datatables/datatables.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.17/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css" />
+
+    <style>
+        .filter-option-inner-inner {
+            color: white;
+            display: block;
+            max-width: 200px !important;
+            text-overflow: ellipsis;
+        }
+
+        #contract-date {
+            width: 90%;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            text-align: left;
+        }
+
+            #contract-date::-webkit-input-placeholder {
+                color: white;
+                font-size: 0.875rem;
+                font-family: Arial;
+                font-style: normal !important;
+            }
+
+        .tippy-button {
+            width: 90%;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            text-align: left;
+        }
+
+        .tippy-box[data-theme~='orange-host'] {
+            background-color: #ff6a00;
+        }
+
+        .checked-filter {
+            background-color: #ff6a00 !important;
+        }
+
+        #deals-table_filter {
+            text-align: left !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        const True = true;
+        const False = false;
+        const isTop = @ViewBag.IsTop.ToString();
+        const isDepHeader = @ViewBag.IsDepHeader.ToString();
+        const ignoreCookie = @ViewBag.IgnoreCookie.ToString();
+        const ignoreActive = @ViewBag.IgnoreActive.ToString();
+        const stepId = '@ViewBag.StepId.ToString()';
+        const isProduct = @ViewBag.IsProduct.ToString();
+        const isLogistics = @ViewBag.IsLogistics.ToString();
+        const salesId = '@ViewBag.SalesId.ToString()';
+    </script>
+    <script src="~/lib/autonumeric/autoNumeric-2.0-BETA.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2.2.0/src/js.cookie.min.js"></script>
+    <script type="text/javascript" src="~/lib/datepicker/js/datepicker.min.js"></script>
+    <script type="text/javascript" src="~/lib/datatables/datatables.min.js"></script>
+    <script type="text/javascript" src="~/js/Deal/DealList/dealsList.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/Deal/DealList/filterItem.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/Deal/DealList/mapToGetElementFromKey.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/Deal/DealList/InitializeFilters.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/Deal/DealList/InitializeEventTriggers.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/Deal/DealList/InitializeTippyWindows.js" asp-append-version="true"></script>
+
+    <script src="https://unpkg.com/@@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.17/dist/js/bootstrap-select.min.js"></script>
+}

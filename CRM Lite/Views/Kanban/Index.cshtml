@@ -1,0 +1,74 @@
+﻿
+@{
+	ViewData["Name"] = "Канбан";
+}
+		<body>
+			<div class="animated fadeIn">
+                <div id="kanban" class="card">
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#deals">Сделки</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#product-request">Заявки на продуктирование</a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <partial name="DealsKanban" />
+                            <partial name="ProductRequestKanban" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </body>
+		@section Scripts
+    {
+			<script src="~/js/kanban.js" asp-append-version="true"></script>
+			<script src="~/lib/select2/select2.min.js"></script>
+		}
+
+		@section Styles {
+
+			<link href="~/lib/select2/select2.min.css" rel="stylesheet" />
+			<link href='~/lib/dropzone/dropzone.css' type='text/css' rel='stylesheet'>
+			<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+			<meta charset="UTF-8" />
+
+
+			<link href="~/lib//jkanban/jkanban.min.css" rel="stylesheet" />
+			<script src="~/lib/jkanban/jkanban.min.js"></script>
+
+			<style>
+						
+						.info {
+							background: #20a8d8;
+							height: auto;
+							min-height: 5em;
+							text-align: center;
+						}
+
+						.info-text {
+							font-size: smaller;
+							font-weight: 600;
+							color: white;
+						}
+
+						.kanban-body {
+							min-height: 200px;
+							padding: 10px;
+						}
+
+						kanban-step {
+							position: relative;
+							float: left;
+							background: #e2e4e6;
+							transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+						}
+			</style>
+		}
+
+

@@ -1,0 +1,100 @@
+﻿
+@{
+	ViewData["Name"] = "Список продуктовых направлений";
+}
+
+
+<div class="animated fadeIn">
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="card">
+				<div class="card-header">
+					<i class="fa fa-align-justify"></i>
+				</div>
+				<div class="card-body">
+					<table id="lines-table" class="table table-hover">
+						<thead>
+							<tr>
+								<th>id</th>
+								<th>Название</th>
+								@*	<th>Ответственный</th>*@
+								@*<th>Вероятность</th>*@
+								<th>Департамент</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+
+					</table>
+					<div class="row" style="justify-content:center;">
+						<a class="btn btn-primary" asp-action="ProductLine">Добавить направление</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+
+@section Styles {
+	<link rel="stylesheet" type="text/css" href="~/lib/datatables/datatables.min.css" />
+}
+
+@section Scripts {
+
+	<script type="text/javascript" src="~/lib/datatables/datatables.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () { 
+			var l = [];
+			let line = {};
+			var dealId = location.href.split('/')[location.href.split('/').length - 1];
+			const table = $('#lines-table').DataTable({
+				"language": {
+					"url": "/lib/datatables/datatables.language.russian.json"
+				},
+
+				"ajax": {
+					"type": "GET",
+					"url": `${api}/api/LinesForList`,
+					"dataSrc": function (json) {
+						return json;
+					}
+				},
+				"columns": [
+					{ "data": "id" },
+					{ "data": "name" },
+					//{ "data": "techContactId" },
+				//	{ "data": "responsible" },
+					{ "data": "department" },
+				],
+				"columnDefs": [
+					{
+						"targets": [0],
+						"visible": false,
+						"searchable": false
+					}
+				]
+			});
+
+			$('#lines-table').on('click',
+				'tbody tr',
+				function () {
+					$.ajax({
+						type: "GET",
+						url: `${api}/api/ProductLines/${(table.row(this).data()).id}`, // the URL of the controller action method
+						data: null, // optional data
+						success: function (result) {
+							window.location.href = `/ProductLines/ProductLine/${result.id}`;
+						},
+						error: function (req, status, error) {
+							// do something with error
+						}
+					});
+					//	window.open(`ProductRequest/${(table.row(this).data()).id}`, '_blank');
+				});
+			$('#lines-table tbody').hover(function () {
+				$(this).css('cursor', 'pointer');
+			});
+		});
+	</script>
+}

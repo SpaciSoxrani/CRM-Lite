@@ -1,0 +1,98 @@
+﻿
+@{
+	ViewData["Name"] = "Список";
+}
+
+
+<div class="animated fadeIn">
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="card">
+				<div class="card-header">
+					<i class="fa fa-align-justify"></i>
+				</div>
+				<div class="card-body">
+					<table id="vendors-table" class="table table-hover">
+						<thead>
+							<tr>
+								<th>id</th>
+								<th>Название</th>
+								<th>Продуктовое направление</th>
+								<th>Ответственный</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+
+					</table>
+					<div class="row" style="justify-content:center;">
+						<a class="btn btn-primary" asp-action="Vendor">Добавить вендора</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+	</div>
+
+</div>
+
+@section Styles {
+	<link rel="stylesheet" type="text/css" href="~/lib/datatables/datatables.min.css" />
+}
+
+@section Scripts {
+
+	<script type="text/javascript" src="~/lib/datatables/datatables.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			var l = [];
+			let line = {};
+			var dealId = location.href.split('/')[location.href.split('/').length - 1];
+			const table = $('#vendors-table').DataTable({
+				"language": {
+					"url": "/lib/datatables/datatables.language.russian.json"
+				},
+
+				"ajax": {
+					"type": "GET",
+					"url": `${api}/api/VendorsForList`,
+					"dataSrc": function (json) {
+						return json;	
+					}
+				},
+				"columns": [
+					{ "data": "id" },
+					{ "data": "name" },
+					{ "data": "lineName" },
+					{ "data": "responsibleName" },
+				],
+				"columnDefs": [
+					{
+						"targets": [0],
+						"visible": false,
+						"searchable": false
+					}
+				]
+			});
+
+			$('#vendors-table').on('click',
+				'tbody tr',
+				function () {
+					$.ajax({
+						type: "GET",
+						url: `${api}/api/Vendors/${(table.row(this).data()).id}`, // the URL of the controller action method
+						data: null, // optional data
+						success: function (result) {
+							window.location.href = `/Vendors/Vendor/${result.vendorGuid}`;
+						},
+						error: function (req, status, error) {
+							// do something with error
+						}
+					});
+					//	window.open(`ProductRequest/${(table.row(this).data()).id}`, '_blank');
+				});
+			$('#vendors-table tbody').hover(function () {
+				$(this).css('cursor', 'pointer');
+			});
+		});	
+	</script>
+}

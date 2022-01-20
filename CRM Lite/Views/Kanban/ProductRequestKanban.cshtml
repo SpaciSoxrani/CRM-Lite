@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewData["Name"] = "ProductRequestKanban";
+}
+
+<div class="tab-pane fade" id="product-request">
+    <div class="kanban-container mt-5">
+        <div data-order="1" class="kanban-board" style="width: 33%; margin-left: 0px; margin-right: 0px;">
+            <header class="info">
+                <div class="text-white h4">Start</div>
+            </header>
+            <main class="kanban-body" id="request-start">
+            </main>
+        </div>
+
+        <div data-order="1" class="kanban-board" style="width: 33%; margin-left: 3px; margin-right: 0px;">
+            <header class="info">
+                <div class="text-white h4">In Process</div>
+            </header>
+            <main class="kanban-body" id="request-in-process">
+            </main>
+        </div>
+
+        <div data-order="1" class="kanban-board" style="width: 33%; margin-left: 3px; margin-right: 0px;">
+            <header class="info">
+                <div class="text-white h4">Done</div>
+            </header>
+            <main class="kanban-body" id="request-done">
+            </main>
+        </div>
+    </div>
+</div>

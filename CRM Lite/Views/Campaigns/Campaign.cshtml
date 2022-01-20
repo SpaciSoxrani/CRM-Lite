@@ -1,0 +1,135 @@
+﻿﻿@{
+	ViewData["Name"] = "Маркетинговые кампании";
+}
+<script>
+
+    function Auto(e) {
+        $(e).autoNumeric('init', { aSep: ' ', aDec: ',' });
+    }
+
+/**/</script>
+<form>
+    <div class="animated fadeIn">
+        <div class="card">
+            <div class="card-body generalInfo">
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="company-name">Название</label>
+                        <br />
+                        <input id="company-name" style="width:100%; height:2.5em;" type="text" class="form-control" required/>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="type">Тип кампании</label>
+                        <br />
+                        <select class="form-control" style="width:100%; height:2.5em;" id="type" onchange="FillEvent()" required></select>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="geography">География</label>
+                        <br />
+                        <input id="geography" style="width:100%; height:2.5em;" type="text" class="form-control" required/>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="industry">Отрасль</label>
+                        <br />
+                        <select class="form-control" style="width:100%; height:2.5em;" id="industry" required></select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="planned-budget">Планируемый бюджет</label>
+                        <br />
+                        <input onkeydown="Auto(this)" id="planned-budget" style="width:100%; height:2.5em;" type="text" class="form-control" />
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="actual-budget">Фактический бюджет</label>
+                        <br />
+                        <input onkeydown="Auto(this)" id="actual-budget" style="width:100%; height:2.5em;" type="text" class="form-control" />
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="audience">Состав аудитории</label>
+                        <br />
+                        <select class="form-control" style="width:100%; height:2.5em;" id="audience" required></select>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="responsible">Ответственный</label>
+                        <br />
+                        <select class="form-control" style="width:100%; height:2.5em;" id="responsible" required></select>
+                    </div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="form-group col-md-3">
+                        <label for="partners">Партнеры</label>
+                        <br />
+                        <input id="partners" style="width:100%; height:2.5em;" type="text" class="form-control" />
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="solutions">Продвигаемые решения</label>
+                        <br />
+                        <select multiple="multiple" class="form-control" style="width:100%; height:2.5em;" id="solutions" required></select>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label>Даты активности</label>
+                        <div class="row" style="justify-content: space-between;">
+                            <div class="form-group col-md-5">
+
+                                <input id="first-date-created" type="date" style="width:100%; height:2.5em;"
+                                       class="form-control" />
+                            </div>
+                            <div style="line-height: 2.5em; font-weight: bold;">—</div>
+                            <div class="form-group col-md-5">
+
+                                <input id="last-date-created" type="date" style="width:100%; height:2.5em;"
+                                       class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="event" class="row" style="display:none;">
+
+                </div>
+            </div>
+
+        </div>
+
+        <div id="appointedCompany"></div>
+    </div>
+
+</form>
+
+@section Styles {
+    <link href="~/lib/select2/select2.min.css" rel="stylesheet" />
+    
+    <style>
+        .required-field-group-highlighted {
+            outline: 2px solid red;
+        }
+    </style>
+}
+
+@section Scripts {
+	<script src="~/lib/select2/select2.min.js"></script>
+
+	<script src="~/js/Marketing/marketingCampaign.js" asp-append-version="true"></script>
+
+	<script src="~/lib/autonumeric/autoNumeric-2.0-BETA.js"></script>
+
+	<script>
+		$("select").select2({
+			placeholder: "Выберите элемент",
+			allowClear: true
+		});
+	</script>
+}

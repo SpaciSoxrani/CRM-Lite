@@ -1,0 +1,81 @@
+﻿@{
+    ViewData["Name"] = "Создание интереса";
+}
+
+<div class="card">
+    <div id="steps-card-body" class="card-body collapse show">
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link"
+                   id="interest-creating-tab" data-toggle="pill"
+                   onclick="FillStep(this)"
+                   href="#create" role="tab"
+                   aria-controls="pills-verification" aria-selected="true">Создание интереса</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                   id="interest-qualification-tab" data-toggle="pill"
+                   onclick="FillStep(this)"
+                   href="#qualificate" role="tab"
+                   aria-controls="pills-development" aria-selected="true">
+                    Квалификация
+                </a>
+            </li>
+
+        </ul>
+    </div>
+    <div id="createInterest" style="display: none">
+        <partial name="~/Views/Interest/CreateInterest.cshtml" />
+    </div>
+    <div id="qualificateInterest" style="display: none">
+        <partial name="~/Views/Interest/QualificateInterest.cshtml" />
+    </div>
+    <div id="appointedStep"></div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="~/lib/select2/select2.min.js"></script>
+
+    <script src="~/js//Interest/interest.js" asp-append-version="true"></script>
+    <script src="~/js//Interest/createInterest.js" asp-append-version="true"></script>
+    <script src="~/lib/autonumeric/autoNumeric-2.0-BETA.js"></script>
+
+    <script>
+        $("select").select2({
+            placeholder: "Выберите элемент",
+            allowClear: true
+        });
+
+        $("#source-campaign, #main-contact").select2({
+            placeholder: "Выберите элемент",
+            allowClear: true,
+            tags: true
+        });
+
+        function Auto(e) {
+            $(e).autoNumeric('init', { aSep: ' ', aDec: ',' });
+        }
+    </script>
+}
+
+@section Styles {
+    <link href="~/lib/select2/select2.min.css" rel="stylesheet" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta charset="UTF-8" />
+
+    <style>
+        .required-field-group-highlighted {
+            outline: 2px solid red;
+        }
+
+        .redColor {
+            color: red;
+        }
+
+        .current-step-link {
+            outline: 1px dashed #20a8d8;
+        }
+    </style>
+}

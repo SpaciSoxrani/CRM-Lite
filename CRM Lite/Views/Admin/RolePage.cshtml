@@ -1,0 +1,185 @@
+﻿@{
+     ViewData["Name"] = "Роли пользователей";
+}
+<div id="roles">
+    <div class="row">
+        <div class="form-group col-md-4">
+            <label class="control-label" for="employees">Выберите сотрудника</label>
+            <select class="form-control" id="employees" onchange="LoadRoles()" style="width: 100%">
+            </select>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label class="control-label" for="roles-container">Выберите роли сотрудника</label>
+            <div id="roles-container">
+                <ul class="list-group list-group-flush">
+                    @*Заполнится динамически по ajax чтобы отобразить включенные роли*@
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link href="~/lib/select2/select2.min.css" rel="stylesheet" />
+
+    @*<link rel="stylesheet" href="https://unpkg.com/animate.css@3.5.2/animate.css" type="text/css" />*@
+    <link rel="stylesheet" href="~/lib/rmodal/animate.css" type="text/css" />
+    @*<link rel="stylesheet" href="https://unpkg.com/rmodal@1.0.28/dist/rmodal.css" type="text/css" />*@
+    <link rel="stylesheet" href="~/lib/rmodal/rmodal.css" type="text/css" />
+
+
+    <style>
+        a:hover {
+            cursor: pointer;
+        }
+
+        #roles-container .list-group-item {
+            min-height: 50px;
+        }
+        /********************************************************************************/
+        /* The switch - the box around the slider */
+        #roles-container .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            float: right;
+        }
+
+        /* Hide default HTML checkbox */
+        .switch input {
+            display: none;
+        }
+
+        /* The slider */
+        #roles-container .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .2s;
+            transition: .2s;
+        }
+
+            #roles-container .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .2s;
+                transition: .2s;
+            }
+
+        #roles-container input.primary:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        #roles-container input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        #roles-container input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        #roles-container .slider.round {
+            border-radius: 34px;
+        }
+
+            #roles-container .slider.round:before {
+                border-radius: 50%;
+            }
+
+        /********************************************************************************/
+
+        .input-error {
+            border: 1px solid red;
+        }
+
+        .modal .modal-dialog {
+            width: 400px;
+        }
+
+        .inactive {
+            opacity: 0.5;
+        }
+
+            .inactive::after {
+                content: "Деактивировано (нет возможности выбрать элемент при заполнении формы)";
+            }
+
+        .list-group {
+            margin-bottom: 0;
+        }
+            /*****************************/
+            .list-group.list-group-root {
+                padding: 0;
+                overflow: hidden;
+            }
+
+                .list-group.list-group-root .list-group {
+                    margin-bottom: 0;
+                }
+
+                .list-group.list-group-root .list-group-item {
+                    border-radius: 0;
+                    border-width: 1px 0 0 0;
+                }
+
+                .list-group.list-group-root > .list-group-item:first-child {
+                    border-top-width: 0;
+                }
+
+                .list-group.list-group-root > .list-group > .list-group-item {
+                    padding-left: 30px;
+                }
+
+                .list-group.list-group-root > .list-group > .list-group > .list-group-item {
+                    padding-left: 45px;
+                }
+
+        .list-group-item .glyphicon {
+            margin-right: 5px;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="~/lib/select2/select2.min.js"></script>
+    <script src="~/js/Admin/rolePage.js" asp-append-version="true"></script>
+    <script>
+        $("select").select2({
+            placeholder: "Выберите элемент",
+            allowClear: true
+        });
+        @*$('#employees').change(
+            function () {
+                let id = this.value;
+                if (id != "")
+                    $.ajax({
+                        type: 'get',
+                        url: `@Url.Action("Admin", "GetUserRoles")/${id}`,
+                        success: function(data) {
+                            $("#roles-container > ul").html(data);
+                            // чтобы админ не снял роль сам себе
+                            $("#roles-container .list-group-item").each(function() {
+                                if ($(this).text().trim() == 'Администратор'
+                                    && user.id == $('#employees').val())
+                                    ($(this)).find("input:checkbox").prop('disabled', true);
+                            });
+                        }
+                    });
+            }).change();*@
+    </script>
+}
