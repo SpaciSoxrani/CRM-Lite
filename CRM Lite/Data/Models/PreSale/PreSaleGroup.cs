@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using CRM.Data.Models.Lookup;
 
-namespace CRM.Data.Models.PreSale
+namespace CRM_Lite.Data.Models.PreSale
 {
     public class PreSaleGroup
     {
@@ -28,14 +26,7 @@ namespace CRM.Data.Models.PreSale
         public DateTime? CreatedDate { get; set; }
         public DateTime? ChangedDate { get; set; }
 
-        public User CreatedByUser { get; set; }
-        public Guid? CreatedByUserId { get; set; }
-
-        public User ChangedByUser { get; set; }
-        public Guid? ChangedByUserId { get; set; }
-
         [DefaultValue(true)]
         public bool IsVisible { get; set; }
-        public IEnumerable<PreSaleGroupAccessList> PreSaleGroupAccessLists { get; set; }
     }
 }

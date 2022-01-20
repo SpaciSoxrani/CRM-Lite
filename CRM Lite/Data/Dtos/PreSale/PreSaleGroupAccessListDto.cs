@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace CRM.Data.Dtos.PreSale
+namespace CRM_Lite.Data.Dtos.PreSale
 {
     [JsonObject]
     public class PreSaleGroupAccessListDto

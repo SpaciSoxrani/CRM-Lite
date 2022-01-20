@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace CRM_Lite.Models
+namespace CRM_Lite.Data.Models
 {
     public class User
     {
@@ -15,5 +15,7 @@ namespace CRM_Lite.Models
         public string DisplayName => $"{LastName} {FirstName}";
 
         public string FullName { get; set; }
+        
+        public string Login { get; set; }
     }
 }

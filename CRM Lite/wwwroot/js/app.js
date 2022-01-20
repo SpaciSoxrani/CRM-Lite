@@ -44,13 +44,6 @@ $(document).ready(function ($) {
         }
     });
 
-    $.ajax({
-        url: `${api}/api/check`,
-        success: function(data) {
-            console.log(data);
-        }
-    });
-
   // Add class .active to current link
   $.navigation.find('a').each(function(){
 

@@ -6,7 +6,7 @@ function editPreSaleGroup(id) {
     if (id !== "")
         $.ajax({
             type: "GET",
-            url: `${api}/api/PreSales/PreSaleGroup/${id}`,
+            url: `${location.origin}/PreSales/PreSaleGroup/${id}`,
             success: function (data) {
                 openModalNew();
                 preSaleGroupModel = data;
@@ -60,8 +60,8 @@ function createOrEditPreSale(element, preSaleGroupDto, requestType) {
     $.ajax({
         type: requestType,
         url: isPost
-            ? `${api}/api/PreSales/CreatePreSaleGroup`
-            : `${api}/api/PreSales/EditPreSaleGroup/${preSaleGroupDto.id}`,
+            ? `${location.origin}/PreSales/CreatePreSaleGroup`
+            : `${location.origin}/PreSales/EditPreSaleGroup/${preSaleGroupDto.id}`,
         data: JSON.stringify(preSaleGroupDto),
         contentType: "application/json",
         success: function (data) {
@@ -83,7 +83,7 @@ function createOrEditPreSale(element, preSaleGroupDto, requestType) {
                     $('.btn').attr('disabled', false);
                     closeModalNew();
                     if (isPost)
-                        window.open(`/PreSales/PreSale/${preSaleGroupDto.id}`, '_blank');
+                        window.open(`/PreSales/${preSaleGroupDto.id}`, '_blank');
                 });
         },
         error: function (data) {
@@ -103,8 +103,8 @@ function deletePreSaleGroup(id, name) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                type: "PUT",
-                url: `${api}/api/PreSales/DeletePreSaleGroup/${id}`,
+                type: "DELETE",
+                url: `${location.origin}/PreSales/DeletePreSaleGroup/${id}`,
                 success: function (data) {
                     window.contactData = window.contactData.filter(group => group.id != id);
                     filterItems();
@@ -122,7 +122,7 @@ function getPreSaleGroupFields() {
     var preSalesGroupDepartment = $('#pre-sale-group-new-department');
 
     $.ajax({
-        url: `${api}/api/PreSales/PreSaleGroupStatuses`,
+        url: `${location.origin}/PreSales/PreSaleGroupStatuses`,
         success: function (data) {
             if (preSalesGroupStatus[0].length == 1) {
                 $.each(data,
@@ -141,7 +141,7 @@ function getPreSaleGroupFields() {
     });
     
     $.ajax({
-        url: `${api}/api/Departments/MainDepartments`,
+        url: `${location.origin}/Departments/MainDepartments`,
         success: function (data) {
             if (preSalesGroupDepartment[0].length == 1) {
                 $.each(data,

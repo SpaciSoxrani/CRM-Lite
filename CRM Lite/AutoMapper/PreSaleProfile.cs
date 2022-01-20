@@ -1,10 +1,8 @@
-﻿using System.Linq;
-using AutoMapper;
-using CRM.Data.Dtos.PreSale;
-using CRM.Data.Models.PreSale;
+﻿using AutoMapper;
+using CRM_Lite.Data.Dtos.PreSale;
+using CRM_Lite.Data.Models.PreSale;
 
-
-namespace CRM.API.AutoMapper
+namespace CRM_Lite.AutoMapper
 {
     public class PreSaleProfile : Profile
     {
@@ -25,12 +23,6 @@ namespace CRM.API.AutoMapper
             CreateMap<PreSaleGroup, PreSaleGroupDto>()
                 .ForMember(psg => psg.Status, psg => psg.MapFrom(psg => psg.Status == null ? "" : psg.Status.Name))
                 .ForMember(psg => psg.Department, psg => psg.MapFrom(psg => psg.Department == null ? "" : psg.Department.Name))
-                .ReverseMap();
-
-
-
-            CreateMap<PreSaleGroupAccessList, PreSaleGroupAccessListDto>()
-                .ForMember(psgal => psgal.User, psgal => psgal.MapFrom(psgal => psgal.User == null ? "" : psgal.User.DisplayName))
                 .ReverseMap();
 
             CreateMap<PreSaleStatus, PreSaleStatusDto>()

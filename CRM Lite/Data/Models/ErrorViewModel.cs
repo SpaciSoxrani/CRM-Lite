@@ -1,4 +1,4 @@
-namespace CRM_Lite.Models
+namespace CRM_Lite.Data.Models
 {
     public class ErrorViewModel
     {

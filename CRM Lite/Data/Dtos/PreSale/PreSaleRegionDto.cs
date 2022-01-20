@@ -1,8 +1,7 @@
 ﻿using System;
-using AutoMapper.Configuration.Annotations;
 using Newtonsoft.Json;
 
-namespace CRM.Data.Dtos.PreSale
+namespace CRM_Lite.Data.Dtos.PreSale
 {
     [JsonObject]
     public class PreSaleRegionDto

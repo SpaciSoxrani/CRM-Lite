@@ -7,4 +7,20 @@
         <RootNamespace>CRM_Lite</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="11.0.0" />
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.2" />
+      <PackageReference Include="Vostok.ClusterClient.Core" Version="0.1.41-pre000020" />
+      <PackageReference Include="Vostok.ClusterClient.Transport" Version="0.1.24-pre000030" />
+      <PackageReference Include="Vostok.Logging.Console" Version="1.0.9-pre000014" />
+      <PackageReference Include="Vostok.Logging.File" Version="1.0.19-pre000015" />
+      <PackageReference Include="Vostok.Logging.Microsoft" Version="2.0.14-pre000013" />
+    </ItemGroup>
+
 </Project>

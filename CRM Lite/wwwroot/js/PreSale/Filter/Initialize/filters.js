@@ -1,6 +1,6 @@
 ﻿function initializePreSalesFilters(data) {
     $.ajax({
-        url: `${api}/api/PreSales/PreSaleRegions`,
+        url: `${location.origin}/PreSales/PreSaleRegions`,
         success: function (data) {
             window.preSaleRegions = data;
             $.each(data,
@@ -22,7 +22,7 @@
     });
 
     $.ajax({
-        url: `${api}/api/PreSales/PreSaleStatuses`,
+        url: `${location.origin}/PreSales/PreSaleStatuses`,
         success: function (data) {
             $.each(data,
                 function (idx, a) {
@@ -71,7 +71,7 @@ function initializePreSalesResponsibleUserFilter(data) {
 
 function initializePreSaleGroupsFilters() {
     $.ajax({
-        url: `${api}/api/PreSales/PreSaleGroupStatuses`,
+        url: `${location.origin}/PreSales/PreSaleGroupStatuses`,
         success: function (data) {
             $.each(data,
                 function (idx, a) {
@@ -92,7 +92,7 @@ function initializePreSaleGroupsFilters() {
     });
 
     $.ajax({
-        url: `${api}/api/Departments/MainDepartments`,
+        url: `${location.origin}/Departments/MainDepartments`,
         success: function (data) {
             $.each(data,
                 function (idx, a) {

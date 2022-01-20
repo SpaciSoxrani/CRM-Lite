@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace CRM_Lite.Data.Dtos
 {
     [JsonObject]
-    public class User
+    public class UserDto
     {
         [JsonProperty("id")]
         public Guid Id { get; set; }

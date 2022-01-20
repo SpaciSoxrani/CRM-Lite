@@ -81,7 +81,7 @@ $(document).ready(function () {
         'tbody tr',
         function (e) {
             if (!$(e.target).hasClass('remove'))
-                window.open(`/PreSales/PreSale/${(table.row(this).data()).id}`, '_blank');
+                window.open(`/PreSales/${(table.row(this).data()).id}`, '_blank');
         });
     $('#pre-sale-groups-table tbody').hover(function () {
         $(this).css('cursor', 'pointer');
