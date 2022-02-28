@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using CRM_Lite.Data;
 using CRM_Lite.Data.Dtos.PreSale;
 using CRM_Lite.Data.Models.PreSale;

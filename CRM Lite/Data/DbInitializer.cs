@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CRM_Lite.Data.Models;
+﻿using CRM_Lite.Data.Models;
 using CRM_Lite.Data.Models.PreSale;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace CRM_Lite.Data
 {

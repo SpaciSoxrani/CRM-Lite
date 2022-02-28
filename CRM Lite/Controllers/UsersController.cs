@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using CRM_Lite.Data;
 using CRM_Lite.Data.Dtos;
 using Microsoft.AspNetCore.Mvc;

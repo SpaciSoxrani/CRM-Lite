@@ -1,15 +1,10 @@
 using System.Globalization;
-using System.IO;
 using System.Text;
 using CRM_Lite.AutoMapper;
 using CRM_Lite.Data;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Vostok.Logging.Abstractions;
 using Vostok.Logging.Console;
 using Vostok.Logging.File;
@@ -21,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationContext>(options => options
-    .UseNpgsql("Host=localhost;Port=5432;Database=CRM_Lite;Username=postgres;Password=postgres")
+    .UseNpgsql("Host=localhost;Port=5432;Database=CRM_Lite;Username=postgres;Password=123")
 );
 
 builder.Services.AddAutoMapper(
