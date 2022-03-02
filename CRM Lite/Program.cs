@@ -69,8 +69,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    "default",
+    "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
 
@@ -108,7 +108,7 @@ static void ConfigureLogging(ILoggingBuilder logging)
                 {
                     Type = RollingStrategyType.Hybrid,
                     Period = RollingPeriod.Day,
-                    MaxFiles = 30,
+                    MaxFiles = 30
                 },
                 FileOpenMode = FileOpenMode.Append,
                 Encoding = Encoding.UTF8

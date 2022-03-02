@@ -27,7 +27,7 @@
 	</environment>
 
 	<!-- Styles required by this view -->
-	@await RenderSectionAsync("Styles", required: false)
+	@await RenderSectionAsync("Styles", false)
 </head>
 <!-- BODY options, add following classes to body to change options
 
@@ -96,14 +96,14 @@
     <script src="~/js/app.js" asp-append-version="true"></script>
 	<!-- Plugins and scripts required by this views -->
 	<!-- Custom scripts required by this view -->
-	@await RenderSectionAsync("Scripts", required: false)
+	@await RenderSectionAsync("Scripts", false)
 </body>
 </html>
 <script>
     
     var user = null;
 
-    const domainName = String.raw`@User.Identity.Name`;
+    const domainName = String.raw`@User.Identity?.Name`;
 
     const login = domainName.slice(domainName.lastIndexOf("\\") + 1);
 
