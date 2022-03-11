@@ -1,6 +1,6 @@
 ﻿@model CRM_Lite.Data.Dtos.PreSale.PreSaleGroupDto
 @{
-    ViewData["Name"] = Model.Name;
+    ViewData["Name"] = Model?.Name;
 }
 <div class="animated fadeIn">
     <div class="row">
@@ -410,7 +410,7 @@
         var isMarketing = @(ViewBag.IsMarketing.ToString().ToLower());
         var IsCanRead =  @(ViewBag.IsCanRead.ToString().ToLower());
         var IsCanEdit =  @(ViewBag.IsCanEdit.ToString().ToLower());
-        var groupName = "@Html.Raw(Model.Name)";
+        var groupName = "@Html.Raw(Model?.Name)";
     </script>
 
     <script src="~/lib/autonumeric/autoNumeric-2.0-BETA.js"></script>
